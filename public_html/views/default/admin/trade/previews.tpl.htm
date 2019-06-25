@@ -1,0 +1,141 @@
+<blockquote>
+    <form id="reward_form" action="admin/ajax/save_withdraw/" method="post">
+    <input type="hidden"  name="id" class="apply_id" value="<?php echo $this->apply['id'];?>" />
+    <input type="hidden" class="status" name="status" value="<?php echo $this->apply['status'];?>" />
+
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('申请人账户'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->apply['user_name'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('真实姓名'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->apply['username'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('银行名称'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->apply['bank'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('开户行'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->apply['open_bank'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('银行卡号'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo substr(chunk_split($this->apply['card'], 4, '-'), 0, -1);?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('手机号码'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->apply['mobile'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr> 
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('提现金额'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn" style="color:red;"><?php echo $this->apply['money'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr> 
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('手续费'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn" style="color:red;"><?php echo $this->apply['fee'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr> 
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('地址'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn" ><?php echo $this->apply['address'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr> 
+                             <tr class="jjreason">
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('拒绝原因'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn" >
+                                                       <textarea class="form-control textarea reason" rows="4" name="remarks"  ><?php echo $this->apply['remark'];?></textarea>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </table>
+                        </form>
+</blockquote>
+<?php if($this->apply['status']==0):?>
+<p align="center">
+	<a class="btn btn-success"  href="javascript:;"><?php _e('通过审核'); ?></a> &nbsp; 
+    <a class="btn btn-danger"  href="javascript:;"><?php _e('拒绝审核'); ?></a>
+</p>
+<?php endif;?>
+<script type="text/javascript">
+    $(".jjreason").hide();
+    $(".btn-success").click(function(){
+        $(".jjreason").hide();
+        $(".status").val(1);
+        AWS.ajax_post($('#reward_form'));
+        $('div.modal-backdrop').css('display','none');
+
+    });
+    $(".btn-danger").click(function(){
+        $(".status").val(2);
+        $(".jjreason").show();
+        var reason=$(".reason").val();
+        if(!reason){
+           alert('请填写拒绝的原因');
+        }
+        else{
+           $(".status").val(2); 
+         AWS.ajax_post($('#reward_form'));
+        }
+        $('div.modal-backdrop').css('display','none');
+     
+    });
+</script>

@@ -1,0 +1,269 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <ul class="nav nav-tabs">
+                    <li><a href="admin/user/list/"><?php _e('用户列表'); ?></a></li>
+                    <li><a href="admin/user/list/type-forbidden"><?php _e('封禁用户'); ?></a></li>
+                    <li><a href="#search" data-toggle="tab"><?php _e('搜索'); ?></a></li>
+                    <li class="active"><a href="#add" data-toggle="tab"><?php _e('添加用户'); ?></a></li>
+                    <li><a href="#remove" data-toggle="tab"><?php _e('已删除'); ?></a></li>
+                </ul>
+            </h3>
+        </div>
+
+        <div class="tab-content mod-content">
+            <div class="tab-pane active" id="add">
+            <div class="table-responsive">
+            <form action="admin/ajax/save_user/" id="settings_form" method="post">
+            <table class="table table-striped">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('用户名'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" name="user_name" type="text" value="" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('邮箱'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" name="email" type="text" value="" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('密码'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" name="password" type="password" value="" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('用户组'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <select class="form-control" name="group_id">
+                                <?php foreach ($this->system_group AS $group) { ?>
+                                <?php if ($group == 1 AND !$this->user_info['permission']['is_administortar']) { continue; } ?>
+                                <option value="<?php echo $group['group_id']; ?>"<?php if ($group['group_id'] == 4) { ?> selected="selected"<?php } ?>><?php _e($group['group_name']); ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tfoot>
+                <tr>
+                    <td>
+                        <input type="button" value="<?php _e('添加用户'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#settings_form'));" />
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+            </form>
+            </div>
+            </div>
+
+            <div class="tab-pane" id="search">
+                <form method="post" action="admin/user/list/" onsubmit="return false;" id="search_form" class="form-horizontal" role="form">
+
+                    <input name="action" type="hidden" value="search" />
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('用户名'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <input class="form-control" type="text" value="<?php echo rawurldecode($_GET['user_name']); ?>" name="user_name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('邮箱'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <input class="form-control" type="text" value="<?php echo rawurldecode($_GET['email']); ?>" name="email" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('用户组'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select name="group_id" class="form-control">
+                                <option value=""></option>
+                                <?php foreach($this->system_group as $skey => $sval) { ?>
+                                <option value="<?php echo $sval['group_id']; ?>"<?php if ($_GET['group_id'] == $sval['group_id']) { ?> selected="selected"<?php } ?>><?php _e($sval['group_name']); ?></option>
+                            <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('最后登录 IP 段'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <input class="form-control" type="text" value="<?php echo $_GET['ip']; ?>" name="ip" />
+
+                            <span class="help-block"><?php _e('限 C 段, 如: 203.31.42.*'); ?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('积分'); ?>:</label>
+
+                        <div class="col-sm-6 col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-11  col-sm-5 mod-double">
+                                    <input type="text" class="form-control" name="integral_min" value="<?php echo $_GET['integral_min']; ?>" />
+                                </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                -
+                                </span>
+                                <div class="col-xs-11 col-sm-5">
+                                    <input type="text" class="form-control" name="integral_max" value="<?php echo $_GET['integral_max']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('威望'); ?>:</label>
+
+                        <div class="col-sm-6 col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-11  col-sm-5 mod-double">
+                                    <input type="text" class="form-control" name="reputation_min" value="<?php echo $_GET['reputation_min']; ?>" />
+                                </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                -
+                                </span>
+                                <div class="col-xs-11 col-sm-5">
+                                    <input type="text" class="form-control" name="reputation_max" value="<?php echo $_GET['reputation_max']; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('职业'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select name="category_id" class="form-control">
+                                <option value="0"></option>
+                                <?php if ($this->job_list) { foreach ($this->job_list as $job_id => $job_name) { ?>
+                                    <option value="<?php echo $job_id; ?>"<?php if ($_GET['job_id'] == $job_id) { ?> selected="selected"<?php } ?>><?php _e($job_name); ?></option>
+                                <?php } } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('居住地'); ?>:</label>
+
+                        <div class="col-sm-3 col-xs-3">
+                            <select name="province" class="select_area form-control"></select>
+                        </div>
+                        <div class="col-sm-3 col-xs-3">
+                            <select name="city" class="select_area form-control collapse"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5 col-xs-8">
+                            <button type="button" onclick="AWS.ajax_post($('#search_form'));" class="btn btn-primary"><?php _e('搜索'); ?></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-pane" id="remove">
+                <div class="table-responsive">
+                    <?php if ($this->remove_list) { ?>
+                    <form method="post" action="admin/ajax/remove_recover/" id="remove_form">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" class="check-all"></th>
+                                <th>ID</th>
+                                <th><?php _e('用户名'); ?></th>
+                                <th><?php _e('邮箱'); ?></th>
+                                <th><?php _e('会员组'); ?></th>
+                                <th><?php _e('系统组'); ?></th>
+                                <th><?php _e('注册时间'); ?></th>
+                                <th><?php _e('最后活跃'); ?></th>
+                                <th><?php _e('在线时长'); ?></th>
+                                <th><?php _e('威望'); ?></th>
+                                <?php if (get_setting('integral_system_enabled') == 'Y') { ?>
+                                <th><?php _e('体力值'); ?></th>
+                                <?php } ?>
+                                <th><?php _e('备注'); ?></th>
+                                <th><?php _e('删除原因'); ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($this->remove_list AS $key => $val) { ?>
+                            <tr>
+                                <td><input type="checkbox" value="<?php echo $val['uid']; ?>" name="uids[]"></td>
+                                <td><?php echo $val['uid']; ?></td>
+                                <td>
+                                    <a href="people/<?php if ($val['url_token']) echo $val['url_token']; else echo urlencode($val['user_name']); ?>" target="_blank"><?php echo $val['user_name']; ?></a>
+                                    <?php if ($val['forbidden']) { ?>
+                                    <span class="text-color-999">[ <?php _e('封禁'); ?> ]</span>
+                                    <a href="/admin/comment/answer_list/action-search__user_name-<?php echo urlencode($val['user_name']); ?>" target="_blank"><span class="text-color-999">回复</span></a>
+                                    <a href="/admin/comment/question_comment_list/action-search__user_name-<?php echo urlencode($val['user_name']); ?>" target="_blank"><span class="text-color-999">问题评论</span></a>
+                                    <a href="/admin/comment/answer_comment_list/action-search__user_name-<?php echo urlencode($val['user_name']); ?>" target="_blank"><span class="text-color-999">回复评论</span></a>
+                                    <?php } else if (!$val['valid_email']) { ?>
+                                    <span class="text-color-999">[ <?php _e('邮件未验证'); ?> ]</span>
+                                    <?php } ?>
+                                </td>
+                                <td><?php echo $val['email']; ?></td>
+                                <td><?php echo $this->mem_group[$val['reputation_group']]['group_name']; ?></td>
+                                <td><?php echo $this->system_group[$val['group_id']]['group_name']; ?></td>
+                                <td><?php echo date_friendly($val['reg_time']); ?></td>
+                                <td><?php if ($val['last_active']) { ?><?php echo date_friendly($val['last_active']); ?><?php } else { ?> - <?php } ?></td>
+                                <td><?php echo round($val['online_time'] / 60); ?> 分钟</td>
+                                <td><?php echo $val['reputation']; ?></td>
+                                <?php if (get_setting('integral_system_enabled') == 'Y') { ?>
+                                <td><?php echo $val['integral']; ?></td>
+                                <?php } ?>
+                                <td><?php echo $val['remark']; ?></td>
+                                <td><?php echo $val['reason']; ?></td>
+                            </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </form>
+                    <?php } ?>
+                </div>
+
+                <div class="mod-table-foot">
+                    <div class="col-sm-4 col-xs-12">
+                        <a class="btn btn-danger" onclick="AWS.ajax_post($('#remove_form'));"><?php _e('恢复'); ?></a>
+                    </div>
+                    <div class="col-xs-12 col-sm-8">
+                        <?php echo $this->remove_pagination; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

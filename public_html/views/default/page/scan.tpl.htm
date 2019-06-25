@@ -1,0 +1,32 @@
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+
+    <div class="person_wallet_recharge">
+        <img src="<?php echo $_GET['img'];?>" width="190px" />
+    </div>
+    <script type="text/javascript">
+
+setInterval(function(){ 
+            $.ajax({
+              url:"<?php echo $_GET['check_url']; ?>",
+              data:{order_id:"<?php echo $_GET['order_id'];?>"},
+              type:'post',
+              dataType:'json',
+              success:function(ret){
+                  if(ret.errno==1){
+                      layer.msg('支付成功',{icon:-1},function(){
+                        layer.closeAll();
+                          if(ret.err.url){
+                              parent.location.href=ret.err.url;
+                          }
+                             var index = parent.layer.getFrameIndex(window.name);
+                             parent.layer.close(index);
+                             location.reload();
+                      });
+                    }
+              }
+            })
+
+ }, 1000);
+
+    </script>

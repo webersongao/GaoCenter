@@ -1,0 +1,162 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+	<form action="admin/menus/save_menu/" id="settings_form" method="post" onsubmit="return false">
+	<input type="hidden" name="id" value="<?php echo $this->info['id']; ?>" />
+	<div class="mod">
+		<div class="mod-head">
+			<h3>
+				<ul class="nav nav-tabs">
+					<li><a href="admin/menus/"><?php _e('菜单管理'); ?></a></li>
+					<li class="active"><a href="admin/menus/edit/"><?php _e('新建菜单'); ?></a></li>
+				</ul>
+			</h3>
+		</div>
+
+		<div class="tab-content mod-content">
+			<table class="table table-striped">
+				<tr class="parent_topic_tr">
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('上级菜单'); ?>:</span>
+							<div class="col-sm-4 col-xs-8">
+								<select id="parent_topic_select" class="form-control"  name="pid">
+								<option value="0"> <?php _e('顶级菜单');?> </option>
+								<?php if ($this->menu) { foreach ($this->menu AS $val) { ?>
+								<option value="<?php echo $val['id']; ?>"<?php if ($val['id'] == $this->info['pid']) { ?> selected="selected"<?php } ?>><?php _e($val['title']); ?></option>
+									<?php   foreach ($val['children'] AS $v) { ?>
+										<option value="<?php echo $v['id']; ?>"<?php if ($v['id'] == $this->info['pid']) { ?> selected="selected"<?php } ?>>|----<?php _e($v['title']); ?></option>
+									<?php }  ?>
+								<?php } } ?>
+								</select>
+
+<!-- 								<div class="aw-publish-title">
+									<div class="dropdown">
+										<div class="dropdown-toggle">
+											<input class="aw-hide-txt form-control" id="aw-topic-tags-select" placeholder="<?php _e(根话题); ?>" />
+											<a class="triangle"><i class="icon icon-down"></i></a>
+										</div>
+										<div class="aw-dropdown">
+											<ul class="aw-dropdown-list" style="height: 200px;overflow: scroll;"	>
+											</ul>
+										</div>
+									</div>
+								</div> -->
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('菜单标题'); ?>:</span>
+							<div class="col-sm-4 col-xs-8">
+								<input type="text" name="title" class="form-control" value="<?php echo $this->info['title']; ?>">
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('菜单URL'); ?>:</span>
+							<div class="col-sm-4 col-xs-8">
+								<input type="text" name="url" class="form-control" value="<?php echo $this->info['url']; ?>">
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('菜单图标'); ?>:</span>
+							<div class="col-sm-3 col-xs-8">
+								<input type="text" name="cname" class="form-control" value="<?php echo $this->info['cname']?$this->info['cname']:'glyphicon glyphicon-zoom-in'; ?>">
+							</div>
+								<div class="col-sm-1 " style="height: 35px;">
+								<a class=" icon icon-setting seticon" data-toggle="modal" data-target="#myModal" style=""></a>
+								<a class="glyphicon glyphicon-asterisk" style="font-size: 20px;line-height: 20px;"></a>
+							</div>
+						</div>
+					</td>
+				</tr>
+<!-- 				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('是否左侧显示'); ?>:</span>
+							<div class="col-sm-6 col-xs-8">
+								<div class="btn-group mod-btn">
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" name="unid" value="1"<?php if ($this->info['unid']) { ?> checked="checked"<?php } ?> /> <?php _e('是'); ?>
+									</label>
+
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" name="unid" value="0"<?php if (!$this->info['unid']) { ?> checked="checked"<?php } ?> /> <?php _e('否'); ?>
+									</label>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr> -->
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('状态'); ?>:</span>
+							<div class="col-sm-6 col-xs-8">
+								<div class="btn-group mod-btn">
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" name="status" value="1"<?php if ($this->info['status']) { ?> checked="checked"<?php } ?> /> <?php _e('启用'); ?>
+									</label>
+
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" name="status" value="0"<?php if (!$this->info['status']) { ?> checked="checked"<?php } ?> /> <?php _e('禁用'); ?>
+									</label>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+
+
+				<tfoot>
+				<tr>
+					<td>
+						<input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#settings_form'));" />
+					</td>
+				</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" >
+        <div class="modal-content" style="height: 600px;overflow:scroll;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">选择图标</h4>
+            </div>
+            <div class="modal-body" >
+				<?php TPL::output('admin/global/icons.tpl.htm'); ?>
+            </div>
+            <div class="modal-footer" style="display: none;">
+                <button type="button" class="btn btn-default closemo" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+
+$(".notranslate").find('a').click(function(){
+	var icon=$(this).parents('tr').find('td').eq(1).html();
+	$("input[name=cname]").val(icon);
+	$(".seticon").next().removeClass().addClass(icon);
+	$(".closemo").click();
+	// alert($(this).parents('tr').find('td').eq(1).html());
+});
+</script>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

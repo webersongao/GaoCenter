@@ -1,0 +1,111 @@
+<?php TPL::output('global/header.tpl.htm'); ?>
+
+<div class="aw-container-wrap">
+	<?php TPL::output('block/content_nav_menu.tpl.htm'); ?>
+
+	<div class="container">
+		<div class="row">
+			<div class="aw-content-wrap clearfix">
+				<div class="col-sm-12 col-md-9 aw-main-content">
+					<div class="aw-mod aw-article-list">
+						<?php if ($this->article_list) { ?>
+						<?php foreach ($this->article_list AS $key => $val) { ?>
+						<div class="aw-item">
+							<a class="aw-user-name hidden-xs" href="people/<?php echo $val['user_info']['url_token']; ?>">
+							<img alt="" src="<?php echo get_avatar_url($val['uid'], 'mid'); ?>" />
+							</a>
+							<div class="aw-content">
+								<div class="mod-title">
+									<h3><a href="article/<?php echo $val['id']; ?>" target="_blank"><?php echo $val['title']; ?></a></h3>
+									<?php if (sizeof($this->article_topics[$val['id']])) { ?>
+									<div class="aw-topic-bar">
+										<div class="tag-bar clearfix">
+											<?php foreach($this->article_topics[$val['id']] as $topic_key => $topic_val) { ?>
+											<span class="topic-tag">
+												<a href="topic/<?php echo $topic_val['url_token']; ?>" class="text" data-id="<?php echo $topic_val['topic_id']; ?>"><?php echo $topic_val['topic_title']; ?></a>
+											</span>
+											<?php } ?>
+										</div>
+									</div>
+									<?php } ?>
+								</div>
+								<?php if (cjk_strlen(htmlspecialchars_decode($val['message'])) > 250) { ?>
+								<div class="mod-cover hidden-xs">
+									<a href="article/<?php echo $val['id']; ?>" target="_blank"><img alt="<?php echo $val['title']; ?>" src="<?php echo $val['article_img']; ?>" /></a>
+								</div>
+								<?php } ?>
+								<div class="mod-body">
+									<div class="content" id="detail_<?php echo $val['id']; ?>">
+										<div class="hide-content markitup-box">
+											<p><?php
+											$m1=array();
+											$strbefore = htmlspecialchars_decode($val['message']);
+											$strafter='';
+                                                preg_match_all('/<[a-z]*?>/i',$strbefore,$m1);
+											    foreach($m1[0] as $k=>$value){
+											      $strbefore = strip_tags(str_replace($value,'',$strbefore));
+											     }
+												preg_match_all('/<img.*?>/i',$strbefore,$m1);
+												foreach($m1[0] as $k=>$value){
+													$strbefore = strip_tags(str_replace($value,'',$strbefore));
+												}
+											    $strafter = cjk_substr($strbefore,0,300,'UTF-8','...');
+                                               echo $strafter;
+                                             ?></p>
+										</div>
+									</div>
+								</div>
+								<div class="mod-footer clearfix">
+									<?php if (cjk_strlen(htmlspecialchars_decode($val['message'])) > 250) { ?>
+								        	<a href="article/<?php echo $val['id']; ?>" target="_blank">全文阅读 »</a>
+								    <?php } ?>
+									<span class="pull-right more-operate text-color-999">
+										<?php echo $val['user_info']['user_name']; ?> <?php _e('发表于 :');?> <?php echo date_friendly($val['add_time']); ?>
+
+										<a class="text-color-999" href="article/<?php echo $val['id']; ?>"><i class="icon icon-comment"></i> <?php _e('评论'); ?> (<?php echo $val['comments']; ?>)</a>
+										<a class="text-color-999 dropdown-toggle" data-toggle="dropdown" article-id="<?php echo $val['id'];?>" article-title="<?php echo $val['title'];?>">
+											<i class="icon icon-share"></i> <?php _e('分享'); ?>
+										</a>
+										<div class="bdsharebuttonbox aw-dropdown shareout pull-right">
+										<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">空间</a>
+										<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">微博</a>
+										<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+										</div>
+									</span>
+								</div>
+							</div>
+						</div>
+						<?php } ?>
+
+						<?php echo $this->pagination; ?>
+
+						<?php } ?>
+					</div>
+					<!-- end 文章列表 -->
+				</div>
+				<!-- 侧边栏 -->
+				<div class="col-sm-3 col-md-3 aw-side-bar hidden-xs hidden-sm">
+					<!-- 热门文章 -->
+					<div class="aw-mod aw-text-align-justify">
+						<div class="mod-head">
+							<h3><?php _e('热门文章'); ?></h3>
+						</div>
+						<div class="mod-body">
+							<ul>
+								<?php foreach($this->hot_articles AS $key => $val) { ?>
+								<li><a href="article/<?php echo $val['id']; ?>"><?php echo $val['title']; ?></a></li>
+								<?php } ?>
+							</ul>
+						</div>
+					</div>
+					<!-- end 热门文章 -->
+					<?php TPL::output('block/sidebar_hot_topics.tpl.htm'); ?>
+				</div>
+				<!-- end 侧边栏 -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php TPL::output('global/footer_sharejs.tpl.htm'); ?>
+<?php TPL::output('global/footer.tpl.htm'); ?>

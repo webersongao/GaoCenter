@@ -1,0 +1,39 @@
+<?php if ($this->drafts) { ?>
+<?php foreach ($this->drafts AS $key => $val) { ?>
+<div class="aw-item">
+	<h4>
+		<?PHP switch($val['type']){
+			case 'question':
+				if($val['title']){
+					$href = 'publish/'.$val['item_id'];
+				} else {
+					$href = 'publish/';
+				}
+				$title = $val['title']?$val['title']:'发起问题?';
+				break;
+			case 'answer':
+				$href = 'question/'.$val['item_id'].'#!answer_form';
+				$title = $val['title'];
+				break;
+			case 'article':
+				if($val['title']){
+					$href = 'publish/article/'.$val['item_id'];
+				} else {
+					$href = 'publish/article/';
+				}
+				$title = $val['title']?$val['title']:'发起文章';
+				break;
+		}?>
+		<a href="<?php echo $href; ?>"><?php echo $title; ?></a>
+	</h4>
+	<div class="markitup-box"><?php echo nl2br(htmlspecialchars($val['data']['message'])); ?></div>
+	<div class="meta">
+		<span class="pull-right">
+			<a class="text-color-999" onclick="AWS.User.delete_draft(<?php echo $val['item_id']; ?>, 'answer'); $(this).parents('.aw-item').fadeOut();"><?php _e('删除草稿'); ?></a> • 
+			<a class="text-color-999" href="<?php echo $href; ?>"><?php _e('编辑草稿'); ?></a>
+		</span>
+		<?php echo date_friendly($val['time']); ?>
+	</div>
+</div>
+<?php } ?>
+<?php } ?>

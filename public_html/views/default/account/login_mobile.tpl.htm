@@ -1,0 +1,293 @@
+<?php TPL::output('global/header_meta.tpl.htm'); ?>
+
+<div id="wrapper">
+	<div class="aw-login-box">
+		<div class="mod-body clearfix">
+			<div class="content pull-left">
+				<h1 class="logo"><a href=""></a></h1>
+				<h2><?php echo get_setting('site_name'); ?></h2>
+				<form id="login_form" method="post" onsubmit="return false" action="account/ajax/login_mobile_process/">
+					<input type="hidden" name="return_url" value="<?php echo $this->return_url; ?>" />
+					<ul>
+						<!-- <li>
+							<input type="text" id="aw-login-user-name" class="form-control" placeholder="<?php _e('邮箱'); ?> / <?php _e('用户名'); ?>" name="user_name" />
+						</li> -->
+
+						<li>
+	                        <input class="aw-register-email form-control" id="phone" name="mobile" type="text" placeholder="手机号" tips="<?php _e('请输入你正在使用的手机号'); ?>" value="<?php echo htmlspecialchars($_GET['mobile']); ?>"  errortips="<?php _e('手机号不正确'); ?>" >
+	                    </li>
+
+						<!-- <li>
+							<input type="password" id="aw-login-user-password" class="form-control" placeholder="<?php _e('密码'); ?>" name="password" />
+						</li> -->
+
+						<li>
+	                        <input class="aw-register-email form-control" style="width: 160px;margin-right: 20px;display: inline-block;" name="smscode" type="text"  placeholder="验证码" tips="<?php _e('请准确输入收到的短信验证码'); ?>" errortips="<?php _e('短信验证码不正确'); ?>" >
+
+	                        <button id="Smsbtn" type="button"  class="pull-right btn btn-large btn-primary">获取验证码</button>
+	                    </li>
+
+						<li class="alert alert-danger collapse error_message">
+							<i class="icon icon-delete"></i> <em></em>
+						</li>
+						<li class="last">
+							<a href="javascript:;" onclick="AWS.ajax_post($('#login_form'), AWS.ajax_processer, 'error_message');" id="login_submit" class="pull-right btn btn-large btn-primary"><?php _e('登录'); ?></a>
+							<label>
+								<input type="checkbox" value="1" name="net_auto_login" />
+								<?php _e('记住我'); ?>
+							</label>
+							<a href="account/find_password/">&nbsp;&nbsp;<?php _e('忘记密码'); ?></a>
+						</li>
+					</ul>
+				</form>
+			</div>
+			<div class="side-bar pull-left">
+				<?php if (get_setting('site_close') != 'Y' && (get_setting('sina_weibo_enabled') == 'Y' || get_setting('qq_login_enabled') == 'Y' || get_setting('google_login_enabled') == 'Y' || get_setting('facebook_login_enabled') == 'Y' || get_setting('twitter_login_enabled') == 'Y' || get_setting('weixin_app_id') && get_setting('weixin_app_secret') && get_setting('weixin_account_role') == 'service')) { ?>
+
+					<?php if ($this->return_url) $return_url = 'return_url-' . base64_encode($this->return_url); ?>
+
+					<h3><?php _e('第三方账号登录'); ?></h3>
+					<?php if (get_setting('sina_weibo_enabled') == 'Y') { ?>
+						<a href="account/openid/weibo/bind/<?php echo $return_url; ?>" class="btn btn-block btn-weibo"><i class="icon icon-weibo"></i> 微博登录</a>
+					<?php } ?>
+
+					<?php if (get_setting('qq_login_enabled') == 'Y') { ?>
+						<a href="account/openid/qq/bind/<?php echo $return_url; ?>" class="btn btn-block btn-qq"><i class="icon icon-qq"></i> QQ 登录</a>
+					<?php } ?>
+
+					<?php if (get_setting('weixin_app_id') && get_setting('weixin_app_secret') && get_setting('weixin_account_role') == 'service') { ?>
+						<a href="account/weixin_login/<?php echo $return_url; ?>" class="btn btn-block btn-wechat">
+							<i class="icon icon-wechat"></i> 微信扫一扫登录
+							<div class="img">
+								<img src="<?php echo get_js_url('/weixin/login_qr_code/'); ?>" />
+							</div>
+						</a>
+					<?php } ?>
+
+					<?php if (get_setting('google_login_enabled') == 'Y') { ?>
+						<a href="account/openid/google/bind/<?php echo $return_url; ?>" class="btn btn-block btn-google"> <i class="icon icon-google"></i> Google 登录</a>
+					<?php } ?>
+
+					<?php if (get_setting('facebook_login_enabled') == 'Y') { ?>
+						<a href="account/openid/facebook/bind/<?php echo $return_url; ?>" class="btn btn-block btn-facebook"> <i class="icon icon-facebook"></i> Facebook 登录</a>
+					<?php } ?>
+
+					<?php if (get_setting('twitter_login_enabled') == 'Y') { ?>
+						<a href="account/openid/twitter/bind/<?php echo $return_url; ?>" class="btn btn-block btn-twitter"> <i class="icon icon-twitter"></i> Twitter 登录</a>
+					<?php } ?>
+				<?php } ?>
+			</div>
+		</div>
+		<div class="mod-footer">
+			<span><?php _e('还没有账号?'); ?></span>&nbsp;&nbsp;
+			<a href="account/register/"><?php _e('立即注册'); ?></a>&nbsp;&nbsp;•&nbsp;&nbsp;
+			<a href="/"><?php _e('游客访问');?></a>&nbsp;&nbsp;•&nbsp;&nbsp;
+			<a href="reader/"><?php _e('问答阅读'); ?></a>&nbsp;&nbsp;•&nbsp;&nbsp;
+            <a href="account/login/"><?php _e('账号登录'); ?></a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function () { 
+    $('#login_form input').keydown(function (e) {
+        if (e.keyCode == 13)
+        {
+            $('#login_submit').click();
+        }
+    });
+
+    var check_weixin_login;
+
+    $('.btn-wechat').mouseover(function()
+    {
+    	if ($(this).find('img').length)
+    	{
+    		$(this).addClass('active');
+    	}
+
+    	check_weixin_login = setInterval(function ()
+    	{
+			$.get(G_BASE_URL + '/account/ajax/weixin_login_process/', function (response) {
+				if (response.errno == 1)
+				{
+                    if ($('input[name="return_url"]').val())
+                    {
+                        window.location.href = $(input[name="return_url"]).val();
+                    }
+                    else
+                    {
+                        window.location.reload();
+                    }
+				}
+			}, 'json');
+		}, 1500);
+
+    });
+
+    $('.btn-wechat').mouseout(function()
+    {
+    	$(this).removeClass('active');
+
+    	clearInterval(check_weixin_login);
+    });
+
+    verify_register_form('#login_form');
+
+
+    /* 登陆页面验证 */
+    function verify_register_form(element)
+    {
+
+        $(element).find('[type=text], [type=password]').on({
+            focus : function()
+            {
+                if (typeof $(this).attr('tips') != 'undefined' && $(this).attr('tips') != '')
+                {
+                    $('.error_message em').html($(this).attr('tips'));
+                }
+            },
+            blur : function()
+            {
+                if ($(this).attr('tips') != '')
+                {
+                    switch ($(this).attr('name'))
+                    {
+                        case 'mobile':
+                            $(this).parent().find('.aw-reg-tips').detach();
+                            var phonereg = /^1[345789]\d{9}$/;
+                            if (!phonereg.test($(this).val()))
+                            {   
+                            	$('.error_message').fadeIn();
+
+                            	$('.error_message em').html($(this).attr('errortips'));
+
+                                return;
+                            }
+                            else
+                            {   
+                                $('.error_message').fadeOut();
+                            }
+                            return;
+
+                        case 'smscode':
+                            $(this).parent().find('.aw-reg-tips').detach();
+                            if (!$(this).val())
+                            {
+                                $('.error_message').fadeIn();
+                                $('.error_message em').html($(this).attr('errortips'));
+                                return;
+                            }
+                            else
+                            {
+                                $('.error_message').fadeOut();
+                            }
+                            return;
+
+                    }
+                }
+
+            }
+        });
+    }
+
+    if($.cookie("captcha")){
+        var count = $.cookie("captcha");
+        var btn = $('#Smsbtn');
+        $('#Smsbtn').prop('disabled', true);
+        btn.text(count+'秒');
+        var resend = setInterval(function(){
+            count--;
+            if (count > 0){
+                // btn.text(count+'秒后可重新获取')
+                btn.text(count+'秒');
+                $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
+            }else {
+                $('#Smsbtn').prop('disabled', false);
+                clearInterval(resend);
+                btn.text("获取验证码")
+            }
+        }, 1000);
+    }
+
+
+    $('#Smsbtn').click(function(){
+        var phonereg = /^1[3456789]\d{9}$/;
+        var mobile = document.getElementById("phone").value;
+
+        if(mobile=='' ){
+            AWS.alert("请输入手机号");
+            return false;
+        }
+        if(!phonereg.test(mobile)){
+            AWS.alert("手机号格式不正确");
+            return false;
+        }
+        if($('#Smsbtn').text()!="获取验证码"){
+            return false;
+        }
+        $.post(G_BASE_URL + '/account/ajax/check_mobile/',
+            {
+                mobile: mobile,
+                type: 'find_password'
+            }, function (result)
+            {
+                if (result.errno != 1)
+                {   
+                	$('.error_message').fadeIn();
+
+                    $('.error_message em').html(result.err);
+
+                    return false;
+                }else{
+
+                	$('.error_message').fadeOut();
+                    submit(mobile);
+                }
+            }, 'json');
+    });
+
+
+    function submit(mobile){
+        $.ajax({
+            url: G_BASE_URL + '/tools/sendSms/',
+            type: "post",
+            dataType: "json",
+            data: {
+                mobile: mobile,
+                // phone: document.getElementById("phone").value,
+                // challenge: data.challenge
+            },
+            success: function (result) {
+                console.log(result);
+                if(result.errno == -1)
+                {
+                    AWS.alert(result.err);
+                    return false;
+                }else
+                {
+                    AWS.alert(result.err);
+                    var count = 60;
+                    var inl = setInterval(function () {
+                        $('#Smsbtn').prop('disabled', true);
+                        count -= 1;
+                        var text = count + ' 秒';
+                        $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
+                        $('#Smsbtn').text(text);
+                        if (count <= 0) {
+                            clearInterval(inl);
+                            $('#Smsbtn').prop('disabled', false);
+                            $('#Smsbtn').text('获取验证码');
+                        }
+                    }, 1000);
+                    return true;
+                }
+
+            }
+        })
+    }
+    
+});
+</script>
+<!-- <script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/js/app/login.js"></script> -->
+
+<?php TPL::output('global/footer.tpl.htm'); ?>

@@ -1,0 +1,54 @@
+<?php hook('advertising','getAdFooter',array());?>
+<div class="aw-footer-wrap">
+    <div class="aw-footer">
+    <!--新增友情链接-->
+    <?php if (count($this->links) > 0 ) { ?>
+        <ol class="breadcrumb" style="text-align: center; margin: 0 auto;">
+            <li>
+                <a class="btn btn-mini btn-success" href="javascript:;" onclick="AWS.dialog('ajaxData', {'title':'申请友链', 'url':G_BASE_URL + '/link/apply/'});">
+                    申请友链
+                </a>
+            </li>
+            <?php foreach($this->links AS $key => $val) { ?>
+            <li><a href="<?=$this->links[$key]['site_url']?>" target="_blank"><?=$this->links[$key]['site_name']?></a></li>
+            <?php } ?>
+        </ol>
+        <?php } ?>
+    <!--新增友情链接-->
+        <?php if (is_mobile_phone()) { ?>
+            <div class="container">
+                <a href="./">淘币虎社区</a>
+                <div class="row">
+                    <p align="center">Copyright © 2017-<?php echo date('Y'); ?> 版权所有</p>
+                </div>
+            </div>
+        <?php } else { ?>
+        <br>
+        <?php TPL::output('global/footer_desc.tpl.htm'); ?>
+        <br>
+        淘币虎-比特币,区块链知识问答社区! Copyright © <?php echo date('Y'); ?> <?php if (get_setting('statistic_code')) { ?>
+        <?php echo get_setting('statistic_code'); ?>
+        <?php }else{ ?>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1273479648'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/stat.php%3Fid%3D1273479648%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        <?php } ?>
+        <?php if(get_setting('icp_beian')){ ?> <a align ="center" href="http://www.miibeian.gov.cn" target="blank" rel="nofollow"><?php echo get_setting('icp_beian');?></a><?php } ?>「<a href="https://www.taobihu.com" target="_blank">淘币虎</a>」版权所有
+        <?php } ?>
+    </div>
+</div>
+
+<a class="aw-back-top hidden-xs" href="javascript:;" onclick="$.scrollTo(1, 600, {queue:true});"><i class="icon icon-up"></i></a>
+
+<!-- DO NOT REMOVE -->
+<div style="display:none;" id="aw-ajax-box" class="aw-ajax-box"></div>
+
+<div style="display:none;" id="__crond">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#__crond').html(unescape('%3Cimg%20src%3D%22' + G_BASE_URL + '/crond/run/<?php echo TIMESTAMP; ?>%22%20width%3D%221%22%20height%3D%221%22%20/%3E'));
+        });
+    </script>
+</div>
+<?php TPL::output('global/debuger.tpl.htm'); ?>
+<!-- / DO NOT REMOVE -->
+</body>
+</html>

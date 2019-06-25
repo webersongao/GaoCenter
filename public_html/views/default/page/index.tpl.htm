@@ -1,0 +1,20 @@
+<?php TPL::output('global/header.tpl.htm'); ?>
+
+<div class="aw-container-wrap">
+	<div class="container aw-custom-page">
+		<div class="row">
+			<div class="col-sm-12 col-md-9">
+				<h2><?php echo $this->page_info['title']; ?></h2>
+				<!-- <br/> -->
+				<p><?php echo htmlspecialchars_decode($this->page_info['contents']); ?></p>
+			</div>
+			<!-- 侧边栏 -->
+			<div class="col-sm-12 col-md-3 aw-side-bar hidden-xs hidden-sm">
+					<?php TPL::output('block/sidebar_qrcode.tpl.htm'); ?>					
+			</div>
+			<!-- end 侧边栏 -->
+		</div>
+	</div>
+</div>
+
+<?php TPL::output('global/footer.tpl.htm'); ?>

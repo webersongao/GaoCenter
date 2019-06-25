@@ -1,0 +1,114 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#list" data-toggle="tab"><?php _e('菜单管理'); ?></a></li>
+                    <li><a href="admin/menus/edit/"><?php _e('新建菜单'); ?></a></li>
+                </ul>
+            </h3>
+        </div>
+
+        <div class="mod-body tab-content">
+            <div class="tab-pane active" id="list">
+                <div class="table-responsive">
+                <form id="batchs_form" action="admin/menus/remove/" method="post">
+                <?php if ($this->lists) { ?>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="check-all"></th>
+                                <th><?php _e('菜单标题'); ?></th>
+                                <th><?php _e('状态'); ?></th>
+                                <th><?php _e('上级菜单'); ?></th>
+                                <th><?php _e('操作'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->lists AS $topic_info) { ?>
+                            <tr>
+                                <?php if($topic_info['id']>61):?>
+                                <td><input type="checkbox" name="ids[]" value="<?php echo $topic_info['id']; ?>"></td>
+                                <?php else:?>
+                                <td><?php echo $topic_info['id']; ?></td>
+                                <?php endif;?>
+                                <td><a href="javascript:;" ><?php _e($topic_info['title']); ?></a></td>
+                                <td>
+                                    <?php if (!$topic_info['status']) { ?>
+                                    <a onclick="AWS.ajax_request(G_BASE_URL + '/admin/menus/lock_menus/', 'id=<?php echo $topic_info['id']; ?>&status=1');" title="<?php _e('解除锁定'); ?>" data-toggle="tooltip" class="icon icon-lock md-tip"></a>
+                                    <?php } else { ?>
+                                    <a href="javascript:;" onclick="AWS.ajax_request(G_BASE_URL + '/admin/menus/lock_menus/', 'id=<?php echo $topic_info['id']; ?>&status=0');" data-toggle="tooltip" title="<?php _e('锁定菜单'); ?>" class="icon icon-unlock md-tip"></a>
+                                    <?php } ?>
+                                </td>
+                                <td>
+                                    <a href="javascript:;"><?php _e($topic_info['ptitle']?$topic_info['ptitle']:'顶级菜单'); ?></a>
+                                </td>
+                                <td><a href="admin/menus/edit/id-<?php echo $topic_info['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php } ?>
+                </form>
+                </div>
+
+                <div class="mod-table-foot">
+                    <?php echo $this->pagination; ?>
+                    <a class="btn btn-danger" onclick="AWS.dialog('confirm',{'message': '确定要删除吗？'},function(){
+                        $('.modal-backdrop').hide();
+                        AWS.ajax_post($('#batchs_form'));
+                    });"><?php _e('删除'); ?></a>                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php if ($this->parent_topic_list) { ?>
+<div id="target-category" class="collapse">
+    <?php foreach ($this->parent_topic_list AS $topic_info) { ?>
+    <option value="<?php echo $topic_info['topic_id']; ?>"><?php echo $topic_info['topic_title']; ?></option>
+    <?php } ?>
+</div>
+<?php } ?>
+<script>
+    $(function(){
+
+        var json = '';
+
+        $.each($('#target-category option').toArray(), function (i, e)
+        {
+            if (i >= 1)
+            {
+                json += ',';
+            }
+
+            json += "{'title':'" + $(e).text() + "', 'id':'" + $(e).val() + "'}";
+        });
+
+        $('#batchs_post').click(function()
+        {
+            if($('.icheckbox_square-blue').hasClass("checked")){
+                AWS.dialog('adminCategoryMove', {'option':eval('[' + json + ']'), 'name':'选择根话题','from_id':'#batchs_form'});
+
+                $('#parent_id').val($("#aw-ajax-box .form-control:eq(1)").val());
+                $('#action').val('set_parent_id');
+            }else{
+                AWS.alert(_t('请勾选话题'));
+            }
+
+        });
+
+        $("#aw-ajax-box").delegate('.form-control:eq(1)','change',function() {
+
+            $('#parent_id').val($("#aw-ajax-box .form-control:eq(1)").val());
+        });
+
+    })
+</script>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

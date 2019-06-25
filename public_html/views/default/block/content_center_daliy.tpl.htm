@@ -1,0 +1,62 @@
+<div class="zquestion daily_container">
+    <div class="row">
+        <div class="col-md-4 col-sm-4">
+            <div class="daily-q-hot">
+                <i class="icon icon-ask"></i><span>随机推荐</span>
+                  <?php if ($this->posts_list) { 
+                    $value = rand(0,count($this->posts_list,0)-1);
+                      $daily_post = $this->posts_list[$value];
+                        if ($daily_post['question_id']) {  ?>
+                <div class="page-header">
+                    <h3><a href="question/<?php echo $daily_post['question_id']; ?>" target="_blank"><?php echo $daily_post['question_content']; ?></a></h3>
+                </div>
+                <div class="daily-btn">
+                    <a class="btn btn-primary" href="question/<?php echo $daily_post['question_id']; ?>" target="_blank">我来回答</a>
+                </div>
+                  <?php }else{ ?>
+                <div class="page-header">
+                    <h3><a href="article/<?php echo $daily_post['id']; ?>" target="_blank"><?php echo $daily_post['title']; ?></a></h3>
+                </div>                   
+                <div class="daily-btn">
+                    <a class="btn btn-primary" href="article/<?php echo $daily_post['id']; ?>" target="_blank">评论一下</a>
+                </div>
+               <?php } } ?>
+            </div>
+            <div class="daily_qimg hidden-xs"><a href="/" target="_blank"><img src="/static/taobihu_static/img/slide_001.jpg" alt=""></a></div>
+        </div>
+        <div class="col-md-8 col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">最新问题<a class="pull-right daily-more" href="question/" target="_blank">查看更多</a>
+                </div>
+                <div class="panel-body">
+                    <ul class="iquestion" style="overflow-y: hidden; height: 210px;">
+                        <?php if ($this->posts_list) { ?>
+                        <?php foreach($this->posts_list as $key => $val) { ?>
+                        <?php if ($val['post_type'] == 'question') { ?>
+                          <li style="" class="news-item">
+                            <a href="question/<?php echo $val['question_id']; ?>" target="_blank"><?php echo $val['question_content']; ?><span class="pull-right"><?php echo date_friendly($val['add_time']); ?></span></a>
+                          </li>
+                          <?php } ?>
+                        <?php } ?>
+                        <?php } ?>
+                    </ul>
+                </div>
+            </div>                             
+        </div>                       
+    </div>
+</div>
+<script type="text/javascript" src="static/taobihu_static/js/daily_box_slide.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+    $(".iquestion").bootstrapNews({
+      newsPerPage:5,
+      autoplay: true,
+      pauseOnHover:true,
+      direction: 'up',
+      newsTickerInterval: 4000,
+      onToDo: function () {
+        //console.log(this);
+      }
+    });   
+  });
+</script>

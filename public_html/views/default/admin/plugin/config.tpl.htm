@@ -1,0 +1,186 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<?php if(!$this->configs['group']):?>
+<div class="aw-content-wrap">
+    <form action="admin/plugin/save_config/" id="settings_form" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="addon_name" value="<?php echo $this->info['name']; ?>">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <span class="pull-left">【<?php echo $this->info['title']; ?>】配置</span>
+            </h3>
+        </div>
+        <div class="tab-content mod-content">
+            <table class="table table-striped">
+                <?php foreach($this->configs as $k=>$v):?>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php echo $v['title']; ?>:</span>
+                            <?php switch ($v['type']):
+                                case 'text':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" type="text" value="<?php echo $v['value']; ?>" name="config[<?php echo $k;?>]" />
+                            </div>
+                            <?php break;
+                                case 'radio':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <?php foreach($v['options'] as $k1=>$v1):?>
+                                <input class="form-control" type="radio" value="<?php echo $k1;?>" name="config[<?php echo $k;?>]" <?php if($v['value']==$k1) echo 'checked';?> /><?php echo $v1;?>
+                                <?php endforeach;?>
+                            </div>
+                            <?php break;
+                                case 'password':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" type="password" value="<?php echo $v['value']; ?>" name="config[<?php echo $k;?>]" />
+                            </div>
+                            <?php break;
+                                case 'hidden':
+                            ?>
+                                <input type="hidden" name="config[<?php echo $k;?>]" value="{$v.value}">
+                            <?php break;
+                                case 'checkbox':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <?php foreach($v['options'] as $k1=>$v1):?>
+                                <input class="form-control" type="checkbox" value="<?php echo $k1;?>" name="config[<?php echo $k;?>]" <?php if($v['value']==$k1) echo 'checked';?> /><?php echo $v1;?>
+                                <?php endforeach;?>
+                            </div>
+                            <?php break;
+                                case 'select':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <select class="form-control" name="config[<?php echo $k;?>]">
+                                <?php foreach($v['options'] as $k1=>$v1):?>
+                                <option value="{$opt_k}"><?php echo $v1;?></option>
+                                <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php break;
+                                case 'textarea':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <textarea name="config[<?php echo $k;?>]" class="form-control textarea" rows="2"><?php echo $v['value']?></textarea>
+                            </div>
+                            <?php break;
+    
+                            ?>
+                            <?php endswitch;?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+                <tfoot>
+                <tr>
+                    <td>
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#settings_form'));" />
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        </div>
+    </form>
+</div>
+<?php else:?>
+
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <ul class="nav nav-tabs">
+                    <?php foreach($this->configs['group'] as $k=>$v):?>
+                    <li class="<?php echo $k=='alipay'?'active':'';?>"><a href="#<?php echo $k?>" data-toggle="tab"><?php echo $v['title']; ?></a></li>
+                <?php endforeach;?>
+                </ul>
+            </h3>
+        </div>
+    <form action="admin/plugin/save_tab_config/" id="tab_config" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="addon_name" value="<?php echo $this->info['name']; ?>">
+        <div class="tab-content mod-content">
+            <?php foreach($this->configs['group'] as $k11=>$v11):?>
+            <div class="tab-pane <?php echo $k11=='alipay'?'active':'';?>" id="<?php echo $k11;?>">
+            <table class="table table-striped">
+                <?php foreach($v11['config'] as $k=>$v):?>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php echo $v['title']; ?>:</span>
+                            <?php switch ($v['type']):
+                                case 'text':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" type="text" value="<?php echo $v['value']; ?>" name="config[<?php echo $k11;?>][<?php echo $k;?>]" />
+                            </div>
+                            <?php break;
+                                case 'radio':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <?php foreach($v['options'] as $k1=>$v1):?>
+                                <input class="form-control" type="radio" value="<?php echo $k1;?>" name="config[<?php echo $k11;?>][<?php echo $k;?>]" <?php if($v['value']==$k1) echo 'checked';?> /><?php echo $v1;?>
+                                <?php endforeach;?>
+                            </div>
+                            <?php break;
+                                case 'password':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <input class="form-control" type="password" value="<?php echo $v['value']; ?>" name="config[<?php echo $k11;?>][<?php echo $k;?>]" />
+                            </div>
+                            <?php break;
+                                case 'hidden':
+                            ?>
+                                <input type="hidden" name="config[<?php echo $k11;?>][<?php echo $k;?>]" value="{$v.value}">
+                            <?php break;
+                                case 'checkbox':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <?php foreach($v['options'] as $k1=>$v1):?>
+                                <input class="form-control" type="checkbox" value="<?php echo $k1;?>" name="config[<?php echo $k11;?>][<?php echo $k;?>]" <?php if($v['value']==$k1) echo 'checked';?> /><?php echo $v1;?>
+                                <?php endforeach;?>
+                            </div>
+                            <?php break;
+                                case 'select':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <select class="form-control" name="config[<?php echo $k11;?>][<?php echo $k;?>]">
+                                <?php foreach($v['options'] as $k1=>$v1):?>
+                                <option value="{$opt_k}"><?php echo $v1;?></option>
+                                <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php break;
+                                case 'textarea':
+                            ?>
+                            <div class="col-sm-5 col-xs-8">
+                                <textarea name="config[<?php echo $k11;?>][<?php echo $k;?>]" class="form-control textarea" rows="2"><?php echo $v['value']?></textarea>
+                            </div>
+                            <?php break;
+    
+                            ?>
+                            <?php endswitch;?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+                <tfoot>
+                <tr>
+                    <td>
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                    </td>
+                </tr>
+                </tfoot>            
+            </table>
+            </div>
+            <?php endforeach;?>
+
+        </div>
+  </form>
+    </div>
+</div>
+
+<?php endif;?>
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

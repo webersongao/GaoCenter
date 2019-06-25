@@ -1,0 +1,30 @@
+/*卫博生: 支付结果页面 样式表*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0;}
+ol,ul{list-style:none;}
+caption,th{text-align:center;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:400;}
+q:before,q:after{content:'';}
+address{display:inline;}
+body{background:#fff;color:#1c2837;font:normal 15px arial, verdana, tahoma, sans-serif;position:relative;}
+h3,h4,h5,h6,strong{font-weight:700;}
+em{font-style:italic;}
+img,.input_check,.input_radio{vertical-align:middle;}
+td{padding:3px;}
+h2{font-size:15px;font-weight:400;clear:both;margin:0 0 8px;}
+body h3{font-weight:700;font-size:15px;color:#666;padding:5px 8px 3px;}
+h3 img{margin-top:-2px;}
+h3 a{text-decoration:none;}
+a{color:#333;}
+a:hover{color:#528f6c;text-decoration:underline;}
+#aws_body.redirector{width:500px;margin:150px auto 0;max-width:90%;}
+.message{border-radius:5px;background:#F1F1F1;border:1px solid #b0ce94;color:#3e4934;line-height:150%;padding:10px 10px 10px 30px;}
+.message h3{color:#333;padding:0;}
+.message.error{background-color:#f3dddd;color:#281b1b;font-size:15px;border-color:#deb7b7;}
+fieldset,img,abbr,acronym{border:0;}
+hr,legend{display:none;}
+
+
+
+
+
+

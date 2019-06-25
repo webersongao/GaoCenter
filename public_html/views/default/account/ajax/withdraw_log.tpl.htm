@@ -1,0 +1,29 @@
+<?php if ($this->log) { ?>
+<?php foreach ($this->log AS $key => $val) { ?>
+<tr>
+	<td><?php echo date_friendly($val['addtime'], 604800, 'Y-m-d'); ?></td>
+	<td><?php echo $val['money']; ?></span></td>
+    <td><?php echo $val['card']; ?></span></td>
+    <td><?php echo $val['bank']; ?></span></td>
+    <td><?php echo $val['username']; ?></span></td>
+    <td><?php echo $val['fee']; ?></span></td>
+	<td><?php 
+        switch ($val['status']) {
+            case '0':
+                echo '<font color="blue">待审核</font>';
+                break;
+            case '1':
+                echo '<font color="green">已打款</font>';
+                break;
+            case '2':
+                echo '<font color="red">提现失败</font>';
+                break;
+        }
+     
+    ?></td>
+	<td><?php echo $val['remarks']; ?></td>
+</tr>
+<?php } ?>
+<input type="hidden" class="ajax_result<?php echo $this->page;?>" value="<?php echo count($this->log);?>">
+<input type="hidden" class="per_page" value="<?php echo $this->per_page;?>">
+<?php } ?>

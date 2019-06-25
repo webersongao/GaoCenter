@@ -1,0 +1,253 @@
+<?php TPL::output('global/header.tpl.htm'); ?>
+<?php TPL::output('account/setting/setting_header.tpl.htm'); ?>
+<script src="/static/js/scrollable.js"></script>
+<style type="text/css">
+#wizard {font-size:12px;height:400px;margin:20px auto;overflow:hidden;position:relative;-moz-border-radius:5px;-webkit-border-radius:5px;}
+#wizard .items{width:20000px; clear:both; position:absolute;}
+#wizard .right{float:right;}
+#wizard #status{height:35px;background:#FA9C6C;padding-left:25px !important;}
+#status li{float:left;color:#fff;padding:10px 30px;}
+#status li.active{background-color:#FA6C22;font-weight:normal;}
+.input{width:240px; height:30px; margin:10px auto; line-height:30px; border:1px solid #d3d3d3; padding:2px}
+.page{padding:20px 30px;width:830px;float:left;}
+.page h3{height:42px; font-size:16px; border-bottom:1px dotted #ccc; margin-bottom:20px; padding-bottom:5px}
+.page h3 em{font-size:12px; font-weight:500; font-style:normal}
+.page p{line-height:24px;}
+.page p label{font-size:14px; }
+.btn_nav{height:36px; line-height:36px; margin:20px auto;}
+.prev,.next{width:100px; height:32px; line-height:32px; background:url(btn_bg.gif) repeat-x bottom; border:1px solid #d3d3d3; cursor:pointer}
+</style>
+<ul class="nav nav-tabs aw-nav-tabs" id="myTab">
+    <?php if($this->vail_mobile):?>
+    <li class="active"><a href="#modify" id="" data-toggle="tab"><?php _e('修改手机'); ?></a></li>
+   	<?php endif;?>
+    <!-- <li <?php if(!$this->vail_mobile):?>class="active"<?php endif;?>><a href="#blink" id="" data-toggle="tab"><?php _e('手机认证'); ?></a></li> -->
+</ul>
+<div class="tab-content">
+    <?php //if($this->vail_mobile):?>
+
+  <div class="tab-pane fade in active" id="modify">
+  <form action="#" method="post">
+	<div id="wizard">
+		<ul id="status">
+			<li class="active"><strong>1.</strong>验证原手机</li>
+			<li><strong>2.</strong>验证新手机</li>
+			<li><strong>3.</strong>完成</li>
+		</ul>
+
+		<div class="items">
+			<div class="page">
+               <p><label>原手机号：</label><button type="button"  class="input " /><?php echo substr_replace($this->mobile,'****',3,4);?></button>
+               	<input type="hidden" id="old_mobile" name="old_mobile" value="<?php echo $this->mobile;?>"  />
+				<a  class="contactkf" style="width:190px;height: 30px;display: none;">手机不能用，请联系客服</a>
+
+               </p>
+               <p><label><?php _e('验证码');?>：</label><input type="text" class="input" id="old_code" name="old_code" />
+				<a id="sendButton" onclick="sendCode(this)" class="btn btn-danger form-control" style="width: 90px;height: 31px;margin-bottom:9.5px;vertical-align:bottom">获取验证码</a>
+								<!-- <input id="sendButton" onclick="sendCode()" type="button" value="获取验证码" class="btn btn-danger form-control" style="float: right;width: 90px;height: 34px;"> -->
+
+               </p>
+               <div class="btn_nav">
+                  <input type="button" class="next right" value="下一步&raquo;" />
+               </div>
+            </div>
+			<div class="page">
+               <p><label>新手机号：</label><input type="text" class="input " id="new_mobile" name="new_mobile" /></p>
+               <p><label>验证码：</label><input type="text" class="input" id="new_code" name="new_code" />
+				<a id="sendButton" onclick="sendCode(this)" class="btn btn-danger form-control" style="width: 90px;height: 34px;">获取验证码</a>
+               </p>
+               <div class="btn_nav">
+                  <input type="button" class="prev" style="float:left" value="&laquo;上一步" />
+                  <input type="button" class="next right" value="下一步&raquo;" />
+               </div>
+            </div>
+			<div class="page">
+               <h3>完成修改<br/><em>点击确定完成修改。</em></h3>
+               <br/>
+               <br/>
+               <br/>
+               <div class="btn_nav">
+                  <!-- <input type="button" class="prev" style="float:left" value="&laquo;上一步" /> -->
+                  <input type="button" class="next right" id="sub" value="确定" />
+               </div>
+            </div>
+		</div>
+	</div>
+</form>
+  </div>
+   	<?php //endif;?>
+
+<!--   <div class="tab-pane fade <?php if(!$this->vail_mobile) echo 'in active';?>" id="blink">
+  	<?php if(!$this->vail_mobile):?>
+  	<form action="account/setting/vailmobile/" id="vailmobile" onsubmit="return false" method="post">
+  		<div class="page">
+  		       <p><label>手机号：</label><input type="text" class="input " id="mobile" name="mobile" />
+
+  		       </p>
+               <p><label>验证码：</label><input type="text" class="input" id="code" name="code" />
+				<a id="sendButton" onclick="sendCode(this)" class="btn btn-danger form-control" style="width: 90px;height: 34px;">获取验证码</a>
+               </p>
+           </div>
+	<div class="mod-footer clearfix">
+		<input type="button" value="保存" class="btn btn-large btn-success pull-right" onclick="vailmobile()">
+	</div>
+  	</form>
+  <?php else:?>
+  	<div style="height: 100px;color: red;line-height: 100px;text-align: center;">
+  		<span style="">您已经认证过了！</span>
+  	</div>
+  <?php endif;?>
+  </div> -->
+</div>
+
+
+
+<script type="text/javascript">
+$(function(){
+	$("#wizard").scrollable({
+		onSeek: function(event,i){
+			$("#status li").removeClass("active").eq(i).addClass("active");
+			// console.log(event.handleObj.guid+'a');
+		},
+		onBeforeSeek:function(event,i){
+			// console.log(event.handleObj.guid+'b');
+			// console.log(i);
+			var type=$("#wizard").attr('type');
+				// alert(type);
+
+			if(i==1){
+				var old_code = $("#old_code").val();
+				if(old_code==""){
+				    layer.msg("请输入验证码！");
+					return false;
+				}
+				//验证验证码
+			    if(check_code($("#old_mobile").val(),old_code)<1 && type==1){
+				    layer.msg("验证码有误或者已过期");
+			            return false;
+			    }
+			}
+			if(i==2){
+				var new_mobile = $("#new_mobile").val();
+				if(new_mobile==""){
+					layer.msg("请输入手机号！");
+					return false;
+				}
+    // 			var reg =/^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+    // 			if(!reg.test(new_mobile)){
+				// 	layer.msg("请输入正确的手机号！");
+				// 	return false;
+				// }
+				if(new_mobile==$("#old_mobile").val()){
+					layer.msg("新手机和原手机不能相同");
+					return false;
+				}
+				var new_code = $("#new_code").val();
+				if(new_code==""){
+				    layer.msg("请输入验证码！");
+					return false;
+				}
+				//验证验证码
+			    if(check_code($("#new_mobile").val(),new_code)<1 && type==1){
+				    layer.msg("验证码有误或者已过期");
+			            return false;
+			    }
+			}
+		},
+
+	});
+	$("#sub").click(function(){
+		$.ajax({
+	        type: "post",
+	        url: G_BASE_URL+"/account/setting/modify_mobile/",
+	        dataType: "json",
+	        async:false,
+	        data: {mobile: $("#new_mobile").val(),code:$("#new_code").val()},
+	        success: function (result) {
+	           if(result.errno==1){
+	           	layer.msg(result.err);
+	           	$("#sub").hide();
+	           }
+	        }
+	    });
+	});
+
+
+});
+
+	function check_code(mobile,code){
+		var isvild=0;
+		$.ajax({
+	        type: "post",
+	        url: G_BASE_URL+"/tools/checkSmsCode/",
+	        dataType: "json",
+	        async:false,
+	        data: {code: code,mobile:mobile},
+	        success: function (result) {
+	            isvild=result.errno;
+	        }
+	    });
+	    return isvild;
+	}
+	function sendCode(obj){	
+		var mobile=$(obj).parents('.page').find('input').eq(0).val();
+		if($(obj).parents('.page').find('input').eq(0).attr('name')=='new_mobile'){
+				if(mobile==$("#old_mobile").val()){
+					layer.msg("新手机和原手机不能相同");
+					return false;
+				}
+		}
+		    $.ajax({
+		        type: "post",
+      			url: G_BASE_URL+"/tools/sendSms/",
+		        dataType: "json",
+		        data: {
+		            mobile: mobile
+		        },
+			    	xhrFields: {
+		            withCredentials: true
+		        },
+		        success: function (result) {
+		            if (result.errno == 1) {
+		            layer.msg(result.err);
+
+		 				$(obj).attr('disabled',"true");
+		 				$(obj).css('background-color',"#cec9c8").css('color','#000');
+		                sendInterval = 60;
+		                setInterval(function () {
+		                    $(obj).html(sendInterval > 0? (--sendInterval + "秒") : "获取验证码");
+		                    if (sendInterval <= 0) {
+		                        sendInterval = 0;
+		 						$(obj).removeAttr("disabled");
+		 						$(obj).css('background-color',"#c9302c").css('color','#fff');
+
+		                        clearInterval();
+		                    }
+		                }, 1000);
+		            }else{
+		            	$('.contactkf').show();
+		            	layer.alert(result.err);
+		            }
+		        }
+		    });
+	}
+	function vailmobile(){
+		$.ajax({
+	        type: "post",
+	        url: G_BASE_URL+"/account/setting/vailmobile/",
+	        dataType: "json",
+	        data: $('#vailmobile').serialize(),
+	        success: function (result) {
+	        	if(result.errno==-1){
+			            layer.msg(result.err);
+			        }else{
+			        	layer.msg(result.err);
+			        }
+	        }
+	    });
+	}
+</script>
+
+
+<?php TPL::output('account/setting/setting_footer.tpl.htm'); ?>
+<?php TPL::output('global/footer.tpl.htm'); ?>

@@ -1,0 +1,49 @@
+<?php if ($this->list) { ?>
+<?php foreach($this->list as $key => $val) { ?>
+<div class="aw-item">
+	<h4>
+		<a href="consult/<?php echo $val['id']; ?>"><?php echo $val['title']; ?></a>
+	</h4>
+	<p class="text-color-999">
+	<?php if ($this->type == 1) { ?>
+		<div style="float: left;">
+		我向 <a class="aw-user-name" href="people/<?php echo $val['at_info']['url_token']; ?>" data-id="<?php echo $val['at_info']['uid']; ?>"><?php echo $val['at_info']['user_name']; ?></a> <?php _e('发起了咨询'); ?></div>
+
+
+	<?php } ?>
+	<?php if ($this->type == 2) { ?>
+	<div style="float: left;">
+		<a class="aw-user-name" href="people/<?php echo $val['uf_info']['url_token']; ?>" data-id="<?php echo $val['uf_info']['uid']; ?>"><?php echo $val['uf_info']['user_name']; ?></a> 向我 <?php _e('发起了咨询'); ?></div>
+	
+	<?php } ?>	
+	<div style="float: right;">
+			状态：<?php 
+				switch ($val['consult_status']) {
+					case '-1':
+						echo '未支付';
+						break;
+					case '0':
+						echo '未回答';
+						break;
+					case '1':
+						echo '已回答';
+						break;
+					case '2':
+						echo '被咨询者已拒绝';
+						break;
+					case '3':
+						echo '咨询者取消';
+						break;
+					case '4':
+						echo '平台自动取消';
+						break;
+				}
+			
+			?>
+		</div>
+	</p>
+	<div style="clear: both;"></div>
+</div>
+<?php } ?>
+<input type="hidden" id="total" value="<?php echo $this->total;?>">
+<?php } ?>

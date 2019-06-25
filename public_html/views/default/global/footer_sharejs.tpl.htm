@@ -1,0 +1,19 @@
+<script type="text/javascript">
+	window._bd_share_config={
+    "common":{
+        bdText : '<?php echo htmlspecialchars_decode($this->question_info["question_content"]);?>',
+        bdDesc : '<?php echo htmlspecialchars_decode($this->question_info["question_content"]);?>',
+        bdUrl : G_BASE_URL + '/question/<?php echo $this->question_info["question_id"];?>',
+        onBeforeClick:function(cmd,config){
+            return {bdText:$('#share_content').val(),
+                bdDesc:$('#share_title').val(),
+                bdUrl:$('#share_url').val()
+            }
+        }
+    },
+    "share" : [{
+        bdCustomStyle :"/static/api/css/share.css",
+    }]
+};
+with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>

@@ -1,0 +1,100 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+<div class="aw-content-wrap">
+<form action="admin/link/edit/>" id="settings_form" method="post">
+	<div class="mod">
+		<div class="mod-head">
+			<h3>
+				<span class="pull-left"><?php _e('友链编辑'); ?></span>
+			</h3>	
+		</div>
+		<div class="tab-content mod-content">
+			<table class="table table-striped">
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('网站名称'); ?>:</span>
+							<div class="col-sm-5 col-xs-8">
+								<input name="site_name" value="<?=$this->info['site_name']?>" type="text" class="form-control">
+								<input name="id" value="<?=$this->info['id']?>" type="hidden">
+							</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('网站地址'); ?>:</span>
+							<div class="col-sm-5 col-xs-8">
+								<input name="site_url" value="<?=$this->info['site_url']?>" type="text" class="form-control">
+							</div>
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('联系方式'); ?>:</span>
+							<div class="col-sm-5 col-xs-8">
+								<input name="admin_contact" value="<?=$this->info['admin_contact']?>" type="text" class="form-control">
+							</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('申请时间'); ?>:</span>
+							<div class="col-sm-5 col-xs-8">
+								<?php echo date("Y-m-d H:i",$this->info['time']); ?>
+							</div>
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('网站描述'); ?>:</span>
+							<div class="col-sm-5 col-xs-8">
+								<?php echo $this->info['site_desc'] ?>
+							</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('审核状态'); ?>:</span>
+							<div class="col-sm-5 col-xs-8">
+								<span class="yesno_yes">
+									<label><input type="radio" name="status" value="1"<?php if ($this->info['status'] == 1) { ?> checked="checked"<?php } ?> />已通过</label>
+								</span>
+								<span class="yesno_no">
+									<label><input type="radio" name="status" value="0"<?php if ($this->info['status'] == 0) { ?> checked="checked"<?php } ?> />未审核</label>
+								</span>
+								<span class="yesno_no">
+									<label><input type="radio" name="status" value="2"<?php if ($this->info['status'] == 2) { ?> checked="checked"<?php } ?> />已拒绝</label>
+								</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tfoot>
+					<tr>
+						<td>
+							<input type="button" value="<?php _e('提交'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#settings_form'));">  
+						</td>
+					</tr>
+				</tfoot>
+			</table>			
+		</div>
+	</div>
+</form>
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

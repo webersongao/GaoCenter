@@ -1,0 +1,36 @@
+<form action="link/ajax/apply/" method="post" id="quick_publish" class="form-horizontal">
+	<div class="alert alert-danger hide error_message"><em></em></div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">网站名称：</label>
+		<div class="col-sm-9">
+			<input type="text" name="site_name" class="form-control" value="淘币虎">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">网站地址：</label>
+		<div class="col-sm-9">
+			<input type="text" name="site_url" class="form-control" value="完整格式,如:http(s)://www.taobihu.com">
+		<!-- <p class="aw-text-color-999">完整的格式，如：http(s)://xxx.com</p> -->
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">联系方式：</label>
+		<div class="col-sm-9">
+			<input type="text" name="admin_contact" class="form-control" value="QQ 微信 或 邮箱">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">站点描述：</label>
+		<div class="col-sm-9">
+			<input type="text" name="site_desc" class="form-control" value="站点备注,不超过35个字">
+		</div>
+	</div>
+	<div class="form-group">
+		<p class="aw-text-color-999" style="margin-left:20px;">提交申请后请贵站先做好本站链接，我们将在2-3个工作内进行审核，谢谢合作！</p>
+	</div>
+</form>
+<div class="modal-footer">
+	<span class="pull-right">
+		<button class="btn btn-large btn-success" onclick="AWS.ajax_post($('#quick_publish'), AWS.ajax_processer, 'error_message');">提交申请</button>
+	</span>
+</div>

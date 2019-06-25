@@ -1,0 +1,227 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <ul class="nav nav-tabs">
+                    <li class="<?php if ($_GET['act'] == 'list' && $this->on != 'edit') { ?> active<?php } ?> indexad" data-index="index">
+                        <a href="javascript:;"><?php _e('首页广告'); ?></a>
+                    </li>
+                    <li class="otherad" data-index="other">
+                        <a href="javascript:;"><?php _e('其他广告'); ?></a>
+                    </li>
+                    <li class="<?php if ($this->on == 'edit') { ?> active<?php } ?> addad" data-index="add">
+                        <a href="javascript:;"><?php _e('编辑广告'); ?></a>
+                    </li>
+                </ul>
+            </h3>
+        </div>
+
+        <div id="index" class="mod-body tab-content" <?php if ($this->on == 'edit') { ?>style="display:none;"<?PHP } ?>>
+            <div class="tab-pane <?PHP if($this->cur != 'index'){?> active<?PHP } ?>" id="list">
+                <div class="table-responsive">
+                    <input type="button" value="添加广告" class="btn btn-primary add-ad"/>
+                    <table class="table table-striped ad-list">
+                        <thead>
+                        <tr>
+                            <th><?php _e('标题'); ?></th>
+                            <th><?php _e('图片'); ?></th>
+                            <th><?php _e('链接'); ?></th>
+                            <th><?php _e('打开方式'); ?></th>
+                            <th><?php _e('广告状态'); ?></th>
+                            <th><?php _e('操作'); ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($this->list['index'])) { ?>
+                                <?php foreach ($this->list['index'] AS $key => $val) { ?>
+                                    <tr>
+                                        <td><?PHP echo $val['title']?></td>
+                                        <td><img src="<?PHP echo $val['pic']?>"/></td>
+                                        <td><?PHP echo $val['link']?></td>
+                                        <td>
+                                            <?PHP switch($val['open_type']){
+                                                case 1:
+                                                    echo '当前窗口打开';
+                                                break;
+                                                case 2:
+                                                    echo '新窗口打开';
+                                                break;
+                                             }?>
+                                        </td>
+                                        <td>
+                                            <input type="radio" name="status[<?PHP echo $val['id']?>]" <?PHP if($val['status'] == 1):?>checked<?PHP endif;?> value="1"> 开启
+                                            <input type="radio" name="status[<?PHP echo $val['id']?>]" <?PHP if($val['status'] == 2):?>checked<?PHP endif;?> value="2"> 关闭
+                                        </td>
+                                        <td>
+                                            <a href="admin/advertising/list/on-edit__id-<?PHP echo $val['id'];?>">编辑</a>
+                                            <a href="">删除</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mod-table-foot"><?php echo $this->pagination; ?></div>
+        </div>
+        <div id="other" class="mod-body tab-content" style="display:none;">
+            <input type="button" value="添加广告" class="btn btn-primary add-ad"/>
+            <table class="table table-striped ad-list">
+                <thead>
+                <tr>
+                    <th><?php _e('标题'); ?></th>
+                    <th><?php _e('图片'); ?></th>
+                    <th><?php _e('链接'); ?></th>
+                    <th><?php _e('打开方式'); ?></th>
+                    <th><?php _e('广告状态'); ?></th>
+                    <th><?php _e('操作'); ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($this->list['other'])) { ?>
+                        <?php foreach ($this->list['other'] AS $key => $val) {?>
+                            <tr >
+                                <td><?PHP echo $val['title']?></td>
+                                <td><img src="<?PHP echo $val['pic']?>"/></td>
+                                <td><?PHP echo $val['link']?></td>
+                                <td>
+                                    <?PHP switch($val['open_type']){
+                                        case 1:
+                                            echo '当前窗口打开';
+                                        break;
+                                        case 2:
+                                            echo '新窗口打开';
+                                        break;
+                                    }?>
+                                </td>
+                                <td>
+                                    <input type="radio" name="status[<?PHP echo $val['id']?>]" <?PHP if($val['status'] == 1):?>checked<?PHP endif;?> value="1"> 开启
+                                    <input type="radio" name="status[<?PHP echo $val['id']?>]" <?PHP if($val['status'] == 2):?>checked<?PHP endif;?> value="2"> 关闭
+                                </td>
+                                <td>
+                                    <a href="admin/advertising/list/on-edit__id-<?PHP echo $val['id'];?>">编辑</a>
+                                    <a href="">删除</a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <div id="add" class="mod-body tab-content" <?php if ($this->on != 'edit') { ?>style="display:none;"<?PHP } ?> >
+            <form action="admin/ajax/edit_add/" method="post" id="add-ad-form">
+                <input type="hidden" name="ad_id" value="<?PHP if($this->ad_id){ echo $this->ad_id;}?>"/>
+                <table class="table table-striped">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('广告标题'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <input class="form-control" type="text" name="title" placeholder="标题" value="<?PHP echo $this->info['title']?>"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('广告链接'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <input type="text" name="link" class="form-control" placeholder="链接" value="<?PHP echo $this->info['link']?>"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('广告图片'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8" style="text-align:left;">
+                                    <span class="mod-file">
+                                        <input type="button" class="btn btn-primary" value="<?php _e('点击选择图片');?>" />
+                                        <input type="file" title="<?php _e('未选择任何文件'); ?>" name="pic" exts="png|jpg|bmp|jpeg" class="mod-input-file" />
+                                        <span class="pic-img"><?PHP echo $this->info['pic']?></span>
+                                    </span>
+                                    <span class="help-block"><?php _e('支持上传图片类型'); ?>: jpg,jpeg,gif,png</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('打开方式'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8" style="text-align: left;">
+                                    <select name="open_type">
+                                        <option value="1" <?PHP if($this->info['open_type'] == 1):?>selected<?PHP endif;?> >当前窗口打开</option>
+                                        <option value="2" <?PHP if($this->info['open_type'] == 2):?>selected<?PHP endif;?> >新窗口打开</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('广告状态'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8" style="text-align: left;">
+                                    <input type="radio" name="status" value="1" <?PHP if($this->info['status'] == 1 || empty($this->info['status'])):?>checked<?PHP endif;?> > 开启
+                                    <input type="radio" name="status" value="2" <?PHP if($this->info['status'] == 2):?>checked<?PHP endif;?> > 关闭
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('广告位置'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8" style="text-align: left;">
+                                    <select name="type">
+                                        <option value="1" <?PHP if($this->info['type'] == 1):?>selected<?PHP endif;?> >首页广告</option>
+                                        <option value="2" <?PHP if($this->info['type'] == 2):?>selected<?PHP endif;?> >底部广告</option>
+                                        <option value="3" <?PHP if($this->info['type'] == 3):?>selected<?PHP endif;?> >文末广告</option>
+                                        <option value="4" <?PHP if($this->info['type'] == 4):?>selected<?PHP endif;?> >详情广告</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tfoot>
+                    <tr>
+                        <td>
+                            <input type="reset" class="btn" value="<?php _e('重置'); ?>"/>
+                            <button type="button" onclick="AWS.ajax_post($('#add-ad-form'),function(t,res){if(res.errno < 0){alert(res.err);}else {location='/?/admin/advertising/list/';}});" class="btn btn-primary"><?php _e('确定'); ?></button>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.nav-tabs li').click(function () {
+        var type = $(this).data('index');
+        $('.nav-tabs li').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-content').hide();
+        $('#' + type).show();
+    })
+    $('.add-ad').click(function(){
+        location.href='/?/admin/advertising/list/add';
+        // $('#add-ad-form')[0].reset();
+        // $('.nav-tabs li').removeClass('active');
+        // $('.addad').addClass('active');
+        // $('.tab-content').hide();
+        // $('#add').show();
+
+    })
+    $('.mod-input-file').change(function(){
+        $('.pic-img').html($('.mod-input-file').val());
+    });
+</script>
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

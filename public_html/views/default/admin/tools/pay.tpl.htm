@@ -1,0 +1,258 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+<style type="text/css">
+    .subp{
+        text-align: center;
+    }
+    .subp>input[type=button]{
+        display: inline-block;
+    }
+</style>
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <ul class="nav nav-tabs">
+                    <li class='active' ><a href="#dy" data-toggle="tab"><?php _e('支付宝'); ?></a></li>
+                    <li><a href="#sy" data-toggle="tab"><?php _e('微信'); ?></a></li>
+                    <li><a href="#money" data-toggle="tab"><?php _e('金额设置'); ?></a></li>
+                </ul>
+            </h3>
+        </div>
+                <form id="tab_config" action="admin/tools/save_sms/" method="post">
+        <div class="mod-body tab-content">
+            <div class="tab-pane  active" id="dy">
+            <table class="table table-striped">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('开启状态'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[alipay][status]" value="1"<?php if ($this->setting['alipay']['status'] == 1) { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[alipay][status]" value="0"<?php if ($this->setting['alipay']['status'] != 1) { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('沙箱模式'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[alipay][debug]" value="1"<?php if ($this->setting['alipay']['debug'] == 1) { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[alipay][debug]" value="0"<?php if ($this->setting['alipay']['debug'] != 1) { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('app_id'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="pay_config[alipay][app_id]" class="form-control" type="text" value="<?php echo $this->setting['alipay']['app_id']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('public_key公钥'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="pay_config[alipay][public_key]" class="form-control" type="text" value="<?php echo $this->setting['alipay']['public_key']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('private_key私钥'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="pay_config[alipay][private_key]" class="form-control" type="text" value="<?php echo $this->setting['alipay']['private_key']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tfoot>
+                <tr>
+                    <td class="subp">
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                        <?php if(get_setting('payment')=='Y'):?>
+                        <input type="button" value="<?php _e('关闭支付'); ?>" class="btn btn-warning center-block" onclick="AWS.ajax_request(G_BASE_URL+'/admin/ajax/save_settings/','payment=N')" />
+                          <?php else:?>  
+                        <input type="button" value="<?php _e('开启支付'); ?>" class="btn btn-success center-block" onclick="AWS.ajax_request(G_BASE_URL+'/admin/ajax/save_settings/','payment=Y')")" />
+                          <?php endif;?>  
+                    </td>
+                </tr>
+                </tfoot>            
+            </table>
+            </div>
+
+            <div class="tab-pane" id="sy">
+               <table class="table table-striped">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('开启状态'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[wechat][status]" value="1"<?php if ($this->setting['wechat']['status'] == 1) { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[wechat][status]" value="0"<?php if ($this->setting['wechat']['status']  != 1) { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('沙箱模式'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[wechat][debug]" value="1"<?php if ($this->setting['wechat']['debug'] == 1) { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[wechat][debug]" value="0"<?php if ($this->setting['wechat']['debug'] != 1) { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+         <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('公众号app_id'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="pay_config[wechat][app_id]" class="form-control" type="text" value="<?php echo $this->setting['wechat']['app_id']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('商户id'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="pay_config[wechat][mch_id]" class="form-control" type="text" value="<?php echo $this->setting['wechat']['mch_id']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('商户密匙'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="pay_config[wechat][mch_key]" class="form-control" type="text" value="<?php echo $this->setting['wechat']['mch_key']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tfoot>
+                <tr>
+                    <td class="subp">
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                        <?php if(get_setting('payment')=='Y'):?>
+                        <input type="button" value="<?php _e('关闭支付'); ?>" class="btn btn-warning center-block" onclick="AWS.ajax_request(G_BASE_URL+'/admin/ajax/save_settings/','payment=N')" />
+                          <?php else:?>  
+                        <input type="button" value="<?php _e('开启支付'); ?>" class="btn btn-success center-block" onclick="AWS.ajax_request(G_BASE_URL+'/admin/ajax/save_settings/','payment=Y')")" />
+                          <?php endif;?>  
+                    </td>
+                </tr>
+                </tfoot>            
+            </table>
+            </div>
+            <div class="tab-pane" id="money">
+               <table class="table table-striped">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('余额支付'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[yxpay][status]" value="1"<?php if ($this->setting['yxpay']['status'] == 1) { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="pay_config[yxpay][status]" value="0"<?php if ($this->setting['yxpay']['status']  != 1) { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('开启状态'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="money_config[status]" value="1" <?php if ($this->money_config['status'] == 1) { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="money_config[status]" value="0" <?php if ($this->money_config['status']  != 1) { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('金额设置'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <textarea class="form-control textarea" rows="4" name="money_config[money]"  ><?php echo $this->money_config['money']; ?></textarea>
+                                <span class="help-block"><?php _e('金额设置，逗号隔开'); ?></span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tfoot>
+                <tr>
+                    <td class="subp">
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                        <?php if(get_setting('payment')=='Y'):?>
+                        <input type="button" value="<?php _e('关闭支付'); ?>" class="btn btn-warning center-block" onclick="AWS.ajax_request(G_BASE_URL+'/admin/ajax/save_settings/','payment=N')" />
+                          <?php else:?>  
+                        <input type="button" value="<?php _e('开启支付'); ?>" class="btn btn-success center-block" onclick="AWS.ajax_request(G_BASE_URL+'/admin/ajax/save_settings/','payment=Y')")" />
+                          <?php endif;?>  
+                    </td>
+                </tr>
+                </tfoot>            
+            </table>
+            </div>
+        </div>
+                </form>
+    </div>
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

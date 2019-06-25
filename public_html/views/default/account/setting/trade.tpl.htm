@@ -1,0 +1,111 @@
+<?php TPL::output('global/header.tpl.htm'); ?>
+<?php TPL::output('account/setting/setting_header.tpl.htm'); ?>
+
+<div class="aw-mod">
+	<div class="mod-body">
+		<div class="aw-mod aw-user-setting-bind">
+			<div class="mod-head">
+				<h3><?php _e('设置交易密码'); ?></h3>
+			</div>
+			<form class="form-horizontal" action="account/ajax/modify_trade/" method="post" id="setting_form">
+				<div class="mod-body">
+					<div class="form-group">
+						<label class="control-label" for="input-password-old"><?php _e('手机号码'); ?></label>
+						<div class="row">
+							<div class="col-lg-4" >
+  								<?php if($this->vail_mobile):?>
+								<input type="button" class="form-control" id="mobile"  mo="<?php echo $this->mobile;?>" value="<?php echo substr_replace($this->mobile,'****',3,4);?>" style="<?php if($this->mobile):?>width: 180px;<?php endif;?>float: left;" />
+								<input type="hidden" class="form-control" name="mobile" value="<?php echo $this->mobile;?>" />
+
+  							 	<?php else:?>
+								<input type="text" class="form-control" id="mobile" name="mobile" value="<?php echo $this->mobile;?>" style="width: 180px;float: left;"/>
+  							 	<?php endif;?>
+  								<?php if($this->mobile):?>
+								<a href="account/setting/change_mobile/" class="btn btn-danger form-control"  style="float: right;width: 90px;height: 34px;background-color: #499ef3;">更换手机</a>
+  							 	<?php endif;?>
+
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="input-password-old"><?php _e('验证码'); ?></label>
+						<div class="row">
+							<div class="col-lg-4">
+								<input type="text" class="form-control" id="input-password-old" name="smscode" style="width: 180px;float: left;"/>
+								<input id="sendButton" onclick="sendCode()" type="button" value="获取验证码" class="btn btn-danger form-control" style="float: right;width: 90px;height: 34px;">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="input-password-new"><?php _e('新的交易密码'); ?></label>
+						<div class="row">
+							<div class="col-lg-4">
+							    <input type="password" class="form-control" id="input-password-new" name="password" />
+							</div>
+						</div>
+					</div> 
+					<div class="form-group">
+						<label class="control-label" for="input-password-re-new"><?php _e('确认交易密码'); ?></label>
+						<div class="row">
+							<div class="col-lg-4">
+							    <input type="password" class="form-control" id="input-password-re-new" name="re_password" />
+							</div>
+						</div>
+					</div>      
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="mod-footer clearfix">
+		<a href="javascript:;" class="btn btn-large btn-success pull-right" onclick="AWS.ajax_post($('#setting_form'));"><?php _e('保存'); ?></a>
+	</div>
+</div> 
+<script type="text/javascript">
+ 	var vail_mobile="<?php echo $this->vail_mobile;?>";
+ function sendCode() {
+ 	var mobile='';
+ 	if(vail_mobile)
+     mobile = $("input[name=mobile]").val();
+	else
+     mobile = $.trim($("#mobile").val());
+    $.ajax({
+        type: "post",
+        url: G_BASE_URL+"/tools/sendSms/",
+        dataType: "json",
+        data: {
+            mobile: mobile
+        },
+	    	xhrFields: {
+            withCredentials: true
+        },
+        success: function (result) {
+            if (result.errno == 1) {
+            layer.msg(result.err);
+
+ 				$("#sendButton").attr('disabled',"true");
+ 				$("#sendButton").css('background-color',"#cec9c8").css('color','#000');
+                sendInterval = 60;
+                setInterval(function () {
+                    $("#sendButton").val(sendInterval > 0? (--sendInterval + "秒") : "获取验证码");
+                    if (sendInterval <= 0) {
+                        sendInterval = 0;
+ 						$('#sendButton').removeAttr("disabled");
+ 						$("#sendButton").css('background-color',"#c9302c").css('color','#fff');
+
+                        clearInterval();
+                    }
+                }, 1000);
+            }else{
+
+            layer.alert(result.err);
+            }
+        }
+    });
+}
+
+
+</script>
+
+
+<?php TPL::output('account/setting/setting_footer.tpl.htm'); ?>
+<?php TPL::output('global/footer.tpl.htm'); ?>

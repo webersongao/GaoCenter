@@ -1,0 +1,78 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+	<div class="mod">
+		<div class="mod-head">
+			<h3>
+				<ul class="nav nav-tabs">
+					<li class="<?php if (!$_GET['status']) { ?> active<?php } ?>"><a href="admin/link/"><?php _e('待审核'); ?></a></li>
+			    <li class="<?php if ($_GET['status'] == 1) { ?> active<?php } ?>"><a href="admin/link/status-1"><?php _e('已审核'); ?></a></li>
+				</ul>
+			</h3>
+		</div>
+		<div class="mod-body tab-content">
+			<div class="tab-pane active" id="list">
+				
+				<form id="batchs_form" action="admin/link/mulit_check/" method="post">
+				<input type="hidden" id="batch_type" name="batch_type" value="approval" />
+				<div class="table-responsive">
+					<?php if ($this->list) { ?>	
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th><input type="checkbox" class="check-all"></th>
+								<th>网站名称</th>
+								<th width="*">网址</th>
+								<th width="*">联系方式</th>
+								<th>申请时间</th>
+								<?php if($_GET['status']) {?><th>状态</th><?php }?>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($this->list AS $key => $val) { ?>
+							<tr>
+								<td><input type="checkbox" name="ids[]" value="<?=$val['id']?>"></td>
+								<td><?=$val['site_name']?></a></td>
+								<td>
+									<a href="<?=$val['site_url']?>" target="_blank">
+										<?=$val['site_url']?>
+									</a>
+								</td>
+								<td><?=$val['admin_contact']?></a></td>
+								<td><?php echo date("Y-m-d H:i",$val['time']); ?></td>
+								<?php if($_GET['status']) {?>
+									<td>
+									<?php if($val['status'] == 1){?> 
+										<i class="icon icon-followed md-tip" title="<?php _e('通过'); ?>"></i>
+									<?php } else {?>
+										<i class="icon icon-forbid md-tip" style="background-color: #d9534f;" title="<?php _e('拒绝'); ?>"></i>
+									<?php }?>	
+									</td>
+								<?php }?>
+								<td>
+									<a href="admin/link/edit/id-<?=$val['id']?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>"></a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+					<?php } ?>
+				</div>	
+				</form>
+				<div class="mod-table-foot">
+					<?php echo $this->pagination; ?>
+					<?php if($_GET['status']) {?>
+					<a class="btn btn-danger" onClick="$('#batch_type').val('remove'); AWS.ajax_post($('#batchs_form'));" href="javascript:;"><?php _e('删除所选'); ?></a>
+					<?php } else {?>
+					<a class="btn btn-primary" onClick="$('#batch_type').val('approval'); AWS.ajax_post($('#batchs_form'));" href="javascript:;" id="batch_approval"><?php _e('通过审核'); ?></a>
+					<a class="btn btn-danger" onClick="$('#batch_type').val('decline'); AWS.ajax_post($('#batchs_form'));" href="javascript:;" id="batch_decline"><?php _e('拒绝审核'); ?></a>
+					<?php }?>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

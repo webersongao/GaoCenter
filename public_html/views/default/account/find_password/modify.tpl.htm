@@ -1,0 +1,138 @@
+<?php TPL::output('global/header_meta.tpl.htm'); ?>
+<style type="text/css">
+.oldPwdTip {
+    position: absolute;
+    color: rgba(153, 153, 153, 1);
+    margin-top: 6px;
+    margin-left: 0px;
+    text-align: left;
+    left: -5px;
+    top: -5px;
+    padding: 0 15px;
+    width: 100%;
+    height: 40px;
+    line-height: 38px;
+    color: #777777;
+}    
+</style>
+<div class="aw-register-box">
+    <div class="mod-head">
+        <a href=""><img src="<?php echo G_STATIC_URL; ?>/css/<?php echo $this->template_name; ?>/img/login_logo.png" alt="" /></a>
+        <h1><?php _e('修改密码'); ?></h1>
+    </div>
+    <div class="mod-body">
+        <form class="aw-register-form" id="fpw_form" method="post" action="<?php echo $this->action_link?>">
+            <?php if($this->type){?>
+                <input type="hidden" name="type" value="<?php echo $this->type?>">
+            <?php }?>
+            <input type="hidden" name="active_code" value="<?php echo htmlspecialchars($_GET['key']); ?>"/>
+            <ul>
+                <li class="error alert-danger collapse error_message" style="border: none;">
+                    <p style="background: none repeat scroll 0 0 #eed3d7;border:none;border-radius: 0;color: #666;height: 30px;line-height: 30px;padding-left: 12px;text-align: left;"><i class="icon-remove"></i><em></em></p>             </li>
+                <li>
+                    <label class="oldPwdTip aw-search-query-label">新密码</label>
+
+                    <input class="aw-register-email form-control password" name="password" type="password"  tips="<?php _e('请输入 6-16 个字符,区分大小写'); ?>" errortips="<?php _e('密码不符合规则'); ?>"/>
+                </li>
+                <li>
+                    <label class="oldPwdTip aw-search-query-label">确认新密码</label>
+
+                    <input style="padding-left: 15px !important;" class="aw-register-email form-control re_password" name="re_password" type="password"  tips="<?php _e('请输入 6-16 个字符,区分大小写'); ?>" errortips="<?php _e('密码不符合规则'); ?>" />
+                </li>
+                
+                <li class="aw-register-verify">
+                    <img id="captcha" onclick="this.src = G_BASE_URL + '/account/captcha/' + Math.floor(Math.random() * 10000);" src="" class="auth-img pull-right"/>
+                    <input class="form-control" type="text" name="seccode_verify" placeholder="<?php _e('验证码'); ?>" />
+                </li>
+                <li class="clearfix">
+                    <button class="btn btn-large btn-blue btn-block submit" onclick="AWS.ajax_post($('#fpw_form'), AWS.ajax_processer, 'error_message'); return false;"><?php _e('重置密码'); ?></button>
+                </li>
+                <li class="last" style="cursor: pointer">
+                    <a href="/" class="pull-right" >网站首页</a>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+<?php TPL::output('global/footer.tpl.htm'); ?>
+<script type="text/javascript">
+ $(".password").prev(".oldPwdTip").click(function(){
+    $(".password").focus();
+});  
+ $(".re_password").prev(".oldPwdTip").click(function(){
+    $(".re_password").focus();
+});    
+ $(".password").focus(function(){
+    $(this).prev(".oldPwdTip").hide();
+});
+ $(".password").blur(function(){
+    if(!$(this).val())
+    $(this).prev(".oldPwdTip").show();
+});
+ $(".re_password").focus(function(){
+    $(this).prev(".oldPwdTip").hide();
+});
+ $(".re_password").blur(function(){
+    if(!$(this).val())
+    $(this).prev(".oldPwdTip").show();
+}); 
+    verify_fpw_form('#fpw_form');
+    function verify_fpw_form(element){
+        $(element).find('[type=text], [type=password]').on({
+            focus: function () {
+                if (typeof $(this).attr('tips') != 'undefined' && $(this).attr('tips') != '') {
+                    $(this).parent().find('.aw-reg-tips').detach();
+                    $(this).parent().append('<span class="aw-reg-tips">' + $(this).attr('tips') + '</span>');
+                }
+            },
+            blur: function () {
+                if ($(this).attr('tips') != '')
+                {
+                    switch ($(this).attr('name'))
+                    {
+                        case 'password' :
+                            $(this).parent().find('.aw-reg-tips').detach();
+                            if ($(this).val().length >= 0 && $(this).val().length < 6)
+                            {
+                                $(this).parent().find('.aw-reg-tips').detach();
+                                $(this).parent().append('<span class="aw-reg-tips aw-reg-err"><i class="aw-icon i-err"></i>' + $(this).attr('errortips') + '</span>');
+                                return;
+                            }
+                            if ($(this).val().length > 17)
+                            {
+                                $(this).parent().find('.aw-reg-tips').detach();
+                                $(this).parent().append('<span class="aw-reg-tips aw-reg-err"><i class="aw-icon i-err"></i>' + $(this).attr('errortips') + '</span>');
+                                return;
+                            }
+                            else
+                            {
+                                $(this).parent().find('.aw-reg-tips').detach();
+                            }
+                            return;
+
+                        case 're_password' :
+                            $(this).parent().find('.aw-reg-tips').detach();
+                            if ($(this).val().length >= 0 && $(this).val().length < 6)
+                            {
+                                $(this).parent().find('.aw-reg-tips').detach();
+                                $(this).parent().append('<span class="aw-reg-tips aw-reg-err"><i class="aw-icon i-err"></i>' + $(this).attr('errortips') + '</span>');
+                                return;
+                            }
+                            if ($(this).val().length > 17)
+                            {
+                                $(this).parent().find('.aw-reg-tips').detach();
+                                $(this).parent().append('<span class="aw-reg-tips aw-reg-err"><i class="aw-icon i-err"></i>' + $(this).attr('errortips') + '</span>');
+                                return;
+                            }
+                            else
+                            {
+                                $(this).parent().find('.aw-reg-tips').detach();
+                            }
+                            return;
+                    }
+                }
+            }
+        });
+    };
+</script>

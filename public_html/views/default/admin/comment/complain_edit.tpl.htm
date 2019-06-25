@@ -1,0 +1,115 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <span class="pull-left"><?php _e('提现审核/详情'); ?></span>
+            </h3>
+        </div>
+        <div class="tab-content mod-content">
+                <form action="admin/comment/save_complain/" id="settings_form" method="post" onsubmit="return false">
+                <table class="table table-striped">
+                    <input name="id" type="hidden" value="<?php echo $this->complain['id']; ?>" />
+                   
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('问题'); ?>:</span>
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="btn-group mod-btn">
+                                        <textarea class="form-control textarea" rows="10" readonly><?php echo $this->question['question_content']; ?></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('回复'); ?>:</span>
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="btn-group mod-btn">
+                                        <textarea class="form-control textarea" rows="10" readonly><?php echo $this->answer['answer_content']; ?></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('投诉理由'); ?>:</span>
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="btn-group mod-btn">
+                                        <textarea class="form-control textarea" rows="10" readonly><?php echo $this->complain['contents']; ?></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('审核'); ?>:</span>
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="btn-group mod-btn">
+                                        <label type="button" class="btn mod-btn-color">
+                                            <input type="radio" name="stat" value="1" checked="checked" /> <?php _e('撤销该条最佳回复'); ?>
+                                        </label>
+
+                                        <label type="button" class="btn mod-btn-color">
+                                            <input type="radio" name="stat" value="2"/> <?php _e('拒绝此投诉'); ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('备注'); ?>:</span>
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="btn-group mod-btn">
+                                        <textarea class="form-control textarea" rows="10" name='remarks'></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <tfoot>
+                
+                <tr>
+                    <td>
+                        <input type="button" value="<?php _e('确定'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#settings_form'));" />
+                    </td>
+                </tr>
+                
+                </tfoot>
+            </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.select_area').LocationSelect({
+        labels: ["<?php _e('请选择省份或直辖市'); ?>", "<?php _e('请选择城市'); ?>"],
+        elements: document.getElementsByTagName("select"),
+        detector: function () {
+            this.select(["<?php echo $this->user['province']; ?>", "<?php echo $this->user['city']; ?>"]);
+        },
+        dataUrl: G_BASE_URL.replace('/?', '') + '/static/js/areas.js'
+    });
+
+    $('.mod-input-file').change(function(){
+        $('.filetext').text($('.mod-input-file').val());
+    });
+});
+</script>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

@@ -1,0 +1,202 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#apply" data-toggle="tab"><?php _e('提现申请'); ?></a></li>
+					<li><a href="#applyed" data-toggle="tab"><?php _e(已通过); ?></a></li>
+					<li><a href="#success" data-toggle="tab"><?php _e(已转账); ?></a></li>
+					<li><a href="#noapplyed" data-toggle="tab"><?php _e(未通过); ?></a></li>
+				</ul>
+            </h3>
+        </div>
+
+		<div class="mod-body tab-content">
+			<div class="alert alert-success collapse error_message"></div>
+			<div class="tab-pane active" id="apply">
+			<form action="admin/transaction/export_excel/" method="post" id="page_list_form">
+			<div class="table-responsive">
+			<?php if ($this->list1) { ?>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" class="check-all"></th>
+							<th><?php _e('提现人'); ?></th>
+							<th ><?php _e('提现金额'); ?></th>
+							<th ><?php _e('开户行'); ?></th>
+							<th ><?php _e('卡号'); ?></th>
+							<th ><?php _e('申请时间'); ?></th>
+							<th><?php _e('操作'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->list1 AS $key => $val) { ?>
+						<tr>
+							<td><input type="checkbox" class="cash_id" name="cash[]" value="<?php echo $val['id']; ?>"></td>
+							<td><?php echo $val['username']; ?></td>
+							<td ><?php echo $val['money']; ?></td>
+							<td ><?php echo $val['bank'].'-'.$val['open_bank']; ?></td>
+							<td ><?php echo chunk_split($val['card'],4); ?></td>
+							<td ><?php echo date('Y-m-d H:i:s',$val['addtime']); ?></td>
+							<td>
+                              <a class="icon icon-search md-tip" onclick="AWS.dialog('ajaxData', {'title':'<?php _e('提现审核'); ?>', 'url':G_BASE_URL + '/admin/transaction/previews/?id=<?php echo $val['id'];?>'});" data-original-title="<?php _e('查看内容'); ?>"></a>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			<?php } ?>
+			</div>
+			</form>
+			<?php if ($this->list1) { ?>
+			<div class="mod-table-foot">
+					<a class="btn btn-danger" onclick="exports()">导出Excel</a>
+				</div>
+			<?php } ?>
+			</div>
+			<div class="tab-pane " id="applyed">
+			<form action="admin/ajax/save_page_status/" method="post" id="page_list_form">
+			<div class="table-responsive">
+			<?php if ($this->list2) { ?>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><?php _e('提现人'); ?></th>
+							<th ><?php _e('提现金额'); ?></th>
+							<th ><?php _e('开户行'); ?></th>
+							<th ><?php _e('卡号'); ?></th>
+							<th ><?php _e('申请时间'); ?></th>
+							<th><?php _e('操作'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->list2 AS $key => $val) { ?>
+						<tr>
+							<td><?php echo $val['username']; ?></td>
+							<td ><?php echo $val['money']; ?></td>
+							<td ><?php echo $val['bank'].'-'.$val['open_bank']; ?></td>
+							<td ><?php echo chunk_split($val['card'],4); ?></td>
+							<td ><?php echo date('Y-m-d H:i:s',$val['addtime']); ?></td>
+							<td>
+                              <a class="icon icon-search md-tip" onclick="AWS.dialog('ajaxData', {'title':'<?php _e('提现详情'); ?>', 'url':G_BASE_URL + '/admin/transaction/previews/?id=<?php echo $val['id'];?>'});" data-original-title="<?php _e('查看内容'); ?>"></a>
+                              <a class="icon icon-score md-tip" onclick="carry(<?php echo $val['id'];?>)" data-original-title="<?php _e('转账成功'); ?>"></a>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			<?php } ?>
+			</div>
+			</form>
+
+				
+			</div>
+			<div class="tab-pane " id="success">
+			<form action="admin/ajax/save_page_status/" method="post" id="page_list_form">
+			<div class="table-responsive">
+			<?php if ($this->list4) { ?>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><?php _e('提现人'); ?></th>
+							<th ><?php _e('提现金额'); ?></th>
+							<th ><?php _e('开户行'); ?></th>
+							<th ><?php _e('卡号'); ?></th>
+							<th ><?php _e('申请时间'); ?></th>
+							<th><?php _e('操作'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->list4 AS $key => $val) { ?>
+						<tr>
+							<td><?php echo $val['username']; ?></td>
+							<td ><?php echo $val['money']; ?></td>
+							<td ><?php echo $val['bank'].'-'.$val['open_bank']; ?></td>
+							<td ><?php echo chunk_split($val['card'],4); ?></td>
+							<td ><?php echo date('Y-m-d H:i:s',$val['addtime']); ?></td>
+							<td>
+                              <a class="icon icon-search md-tip" onclick="AWS.dialog('ajaxData', {'title':'<?php _e('提现详情'); ?>', 'url':G_BASE_URL + '/admin/transaction/previews/?id=<?php echo $val['id'];?>'});" data-original-title="<?php _e('查看内容'); ?>"></a>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			<?php } ?>
+			</div>
+			</form>
+			</div>
+			<div class="tab-pane " id="noapplyed">
+			<form action="admin/ajax/save_page_status/" method="post" id="page_list_form">
+			<div class="table-responsive">
+			<?php if ($this->list3) { ?>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><?php _e('提现人'); ?></th>
+							<th ><?php _e('提现金额'); ?></th>
+							<th ><?php _e('开户行'); ?></th>
+							<th ><?php _e('卡号'); ?></th>
+							<th ><?php _e('申请时间'); ?></th>
+							<th><?php _e('操作'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->list3 AS $key => $val) { ?>
+						<tr>
+							<td><?php echo $val['username']; ?></td>
+							<td ><?php echo $val['money']; ?></td>
+							<td ><?php echo $val['bank'].'-'.$val['open_bank']; ?></td>
+							<td ><?php echo chunk_split($val['card'],4); ?></td>
+							<td ><?php echo date('Y-m-d H:i:s',$val['addtime']); ?></td>
+							<td>
+                              <a class="icon icon-search md-tip" onclick="AWS.dialog('ajaxData', {'title':'<?php _e('提现成功详情'); ?>', 'url':G_BASE_URL + '/admin/transaction/previews/?id=<?php echo $val['id'];?>'});" data-original-title="<?php _e('查看内容'); ?>"></a>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			<?php } ?>
+			</div>
+			</form>
+			</div>
+			<div class="mod-table-foot">
+				<?php echo $this->pagination; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('input.enabled-status').on('ifChanged', function () {
+			AWS.ajax_post($('#page_list_form'),  AWS.ajax_processer, 'error_message');
+		});
+	});
+	function carry(oid){
+		var url=G_BASE_URL + '/admin/reward/carry/?id='+oid;
+		    AWS.dialog('confirm', {'message': '确认已经转账了吗'}, function () {
+                AWS.ajax_request(url);
+            })
+	}
+$('.cash_id').on('ifChecked', function (event) {
+    if ($(this).attr("checked",true)) {
+    	console.log($('.cash_id').val());
+    }
+ });
+	function exports(){
+    obj =$(".cash_id");
+    check_val = [];
+    for(k in obj){
+        if(obj[k].checked)
+            check_val.push(obj[k].value);
+    }
+    if(check_val.length<1)
+    	AWS.alert('请选择要导出的数据');
+    else
+		$('#page_list_form').submit();
+	}
+</script>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

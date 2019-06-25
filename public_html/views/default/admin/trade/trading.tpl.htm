@@ -1,0 +1,78 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+<?php var_dump($this->list && $_GET['type']==1 || !$_GET['type']);?>
+<div class="aw-content-wrap">
+	<div class="mod">
+		<div class="mod-head">
+			<h3>
+				<ul class="nav nav-tabs">
+					<li class="<?php echo ($_GET['type']==1 || !$_GET['type'])?'active':''?>"><a href="admin/transaction/trading/type-1" ><?php _e('交易流水'); ?></a></li>
+					<li class="<?php echo $_GET['type']==2?'active':''?>"><a href="admin/transaction/trading/type-2" ><?php _e('系统账户'); ?></a></li>
+				</ul>
+			</h3>
+		</div>
+		<div class="mod-body tab-content">
+			<div class="alert alert-success collapse error_message"></div>
+			<form action="admin/ajax/save_page_status/" method="post" id="page_list_form">
+			<div class="table-responsive">
+			<?php if ($this->list && $_GET['type']==1 || !$_GET['type']) : ?>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th width="20%"><?php _e('标题'); ?></th>
+							<th width="15%"><?php _e('时间'); ?></th>
+							<th width="10%"><?php _e('金额'); ?></th>
+							<th width="10%"><?php _e('支付方式'); ?></th>
+							<th width="10%"><?php _e('状态'); ?></th>
+							<!-- <th width="15%"><?php _e('备注'); ?></th> -->
+							<th width="20%"><?php _e('操作'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->list AS $key => $val) { ?>
+						<tr>
+						 	<td><?php echo $val['title'];?></td>
+							<td ><?php echo date('Y-m-d H:i:s',$val['time']); ?></td>
+							<td><?php echo $val['amount'];?></td>
+							<td ><?php echo $val['mode']>1?($val['type']==2?'支付宝':'微信'):'余额'; ?></td>
+							<td ><?php echo $val['status']==1?'交易成功':'交易失败'; ?></td>
+							<!-- <td ><?php echo $val['remark']; ?></td> -->
+							<td ><a class="icon icon-search md-tip" onclick="AWS.dialog('ajaxData', {'title':'<?php _e('流水详情'); ?>', 'url':G_BASE_URL + '/admin/transaction/preview/?id=<?php echo $val['id'];?>'});" data-original-title="<?php _e('查看内容'); ?>"></a></td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			<?php elseif ($this->list && $_GET['type']==2) : ?>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><?php _e('金额'); ?></th>
+							<th><?php _e('类型'); ?></th>
+							<th><?php _e('时间'); ?></th>
+							<th><?php _e('账户余额'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->list AS $key => $val) { ?>
+						<tr>
+						<td><a style="color: blue;" href="people/<?php echo $val['main_uid'];?>" target="_bank"><?php echo $val['money'];?>元</span></td>
+							<td style="color: red;"><?php echo $val['type']==1?'入账':'出账'; ?></td>
+							<td ><?php echo date('Y-m-d H:i:s',$val['addtime']); ?></td>
+							<td ><?php echo $val['total']; ?></td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+				<?php endif;?>
+			</div>
+			</form>
+			<div class="mod-table-foot">
+				<?php echo $this->pagination; ?>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

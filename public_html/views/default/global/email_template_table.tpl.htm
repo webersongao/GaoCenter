@@ -1,0 +1,163 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8">
+<base target="_blank" />
+<style type="text/css">
+::-webkit-scrollbar{ display: none; }
+</style>
+</head>
+<body tabindex="0" role="listitem">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td align="center">
+    <table class="out-table" width="648" style="border:1px solid #e6e6e6;" cellspacing="0" cellpadding="0">
+        <tr>
+            <td bgcolor="159736" class="phone-b col-100 " width="100%">
+                <a href="http://demo.taobihu.com">
+                    <img src="http://demo.taobihu.com/static/taobihu_static/img/email_top_banner.png" class="phone-i">
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <table width="610" border="0" cellspacing="0" cellpadding="0" align="center" class="col-100">
+                    <tr>
+                        <td align="center" class="pa-l10 pa-r10 phone-b col-100 ">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="col-100 text-l pl-n" style="font:bold 14px/26px SimSun;padding-top:12px;" align="left">
+                                        <?php if ($this->user_name) { ?><?php echo $this->user_name; ?>，<?php } ?><?php _e('您好'); ?>: 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-100 text-l pl-n" style="font:14px/26px SimSun;text-indent:2em;padding-top:8px;padding-bottom: 20px;word-break: break-all;word-wrap: break-word;text-align: justify; " align="left">
+                                        <?php echo $this->message;?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <table width="610" class="col-100" style="border:1px solid #f0f0f0;" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="f5f5f5">
+                    <tr>
+                        <td align="center" style="padding-bottom:15px" class="pa-n">
+                            <table width="95%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="left" style="width:70%;" class="phone-b col-100 text-l">
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <?php if ($this->link) { ?>
+        <tr>
+            <td>
+                <table width="648" border="0" cellspacing="0" cellpadding="0" align="center" class="col-100">
+                    <tr>
+                        <td style=" line-height: 0px;padding-bottom: 30px;padding-top:20px;" align="center" class="show-i pl-n">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <p>请在48小时内点击以下链接继续</p>
+                            <br/>
+                            <a href="<?php echo $this->link; ?>" target="_blank"><img src="http://demo.taobihu.com/static/taobihu_static/img/email_showButton.png" alt="" style="display:block;border:none 0;">
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <td>
+                <table width="648" border="0" cellspacing="0" cellpadding="0" align="center" class="col-100">
+                    <tr>
+                        <td style=" line-height: 0px;padding-bottom: 10px;" align="center" class="show-i pl-n">
+                            <img src="http://demo.taobihu.com/static/taobihu_static/img/email_bottom_banner.png" alt="淘币虎微信二维码" style="display:block;border:none 0;">
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="padding-bottom:12px;padding-top:12px;border-top:1px solid #e6e6e6;" bgcolor="464646">
+                <table width="610" class="col-100" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                    <tr>
+                        <td align="left" class="phone-b col-100 text-l" style="width:80%;line-height:24px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr>
+                                    <td class="phone-b col-100 text-c pa-t6 pa-l10">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td class="phone-b col-100 text-l " style="color:#a0a0a0;font-size:12px;mso-line-height-rule: exactly;font-family: Microsoft YaHei,  arial, sans-serif; padding-left:4px;">
+                                                    此为「淘币虎」系统邮件，请勿直接回复。
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="phone-b col-100 text-l" style="color:#a0a0a0;font-size:12px;mso-line-height-rule: exactly;font-family: Microsoft YaHei, arial, sans-serif; padding-left:4px;">
+                                                    若不想收到提醒 ？| <a href="<?php echo get_js_url('/account/setting/privacy/'); ?>" target="_blank" style="color:#a0a0a0;text-decoration:none;mso-line-height-rule: exactly;"><?php _e('修改通知设置'); ?></a> | 联系客服：<a href="mailto:webersongao@163.com" style="color:#a0a0a0;text-decoration:none;mso-line-height-rule: exactly;">webersongao@163.com</a>
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td class="phone-b col-100 text-c pa-t10" align="center" style="width:20%;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td class="phone-b col-100 text-c pa-t10" align="center">
+                                                    <img src="http://demo.taobihu.com/static/taobihu_static/img/email_footerLogo.png" class="phone-i" width="96" height="38" style="border:none 0; vertical-align:middle;">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="display:none">
+                        <td><img width="1" height="1" src="http://demo.taobihu.com?from=email_footerLogo" style="vertical-align:bottom;">
+                        </td>
+                        <td>
+                        <br/>
+                        <a href="<?php echo base_url(); ?>" target="_blank"><?php echo get_setting('site_name'); ?></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<style type="text/css">
+body{font-size:14px;font-family:arial,verdana,sans-serif;line-height:1.666;padding:0;margin:0;overflow:auto;white-space:normal;word-wrap:break-word;min-height:90px}
+td, input, button, select, body{font-family:Helvetica, 'Microsoft Yahei', verdana}
+pre {white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;width:95%}
+th,td{font-family:arial,verdana,sans-serif;line-height:1.666}
+img{ border:0}
+header,footer,section,aside,article,nav,hgroup,figure,figcaption{display:block}
+blockquote{margin-right:0px}
+</style>
+</body>
+
+</html>

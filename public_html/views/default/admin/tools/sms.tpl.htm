@@ -1,0 +1,212 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+    <div class="mod">
+        <div class="mod-head">
+            <h3>
+                <ul class="nav nav-tabs">
+                    <li class='active' ><a href="#dy" data-toggle="tab"><?php _e('阿里大鱼'); ?></a></li>
+                    <li><a href="#sy" data-toggle="tab"><?php _e('示远短信'); ?></a></li>
+                    <li><a href="#tx" data-toggle="tab"><?php _e('腾讯云短信'); ?></a></li>
+                </ul>
+            </h3>
+        </div>
+                <form id="tab_config" action="admin/tools/save_sms/" method="post">
+        <div class="mod-body tab-content">
+            <div class="tab-pane  active" id="dy">
+            <table class="table table-striped">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('开启状态'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="sms_config[dy][status]" value="Y"<?php if ($this->setting['dy']['status'] == 'Y') { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="sms_config[dy][status]" value="N"<?php if ($this->setting['dy']['status'] != 'Y') { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('accessKeyId'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="sms_config[dy][accessKeyId]" class="form-control" type="text" value="<?php echo $this->setting['dy']['accessKeyId']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('accessKeySecret'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="sms_config[dy][accessKeySecret]" class="form-control" type="text" value="<?php echo $this->setting['dy']['accessKeySecret']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('SignName'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="sms_config[dy][SignName]" class="form-control" type="text" value="<?php echo $this->setting['dy']['SignName']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('TemplateCode'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="sms_config[dy][TemplateCode]" class="form-control" type="text" value="<?php echo $this->setting['dy']['TemplateCode']; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tfoot>
+                <tr>
+                    <td>
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                    </td>
+                </tr>
+                </tfoot>            
+            </table>
+            </div>
+
+            <div class="tab-pane" id="sy">
+               <table class="table table-striped">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('开启状态'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="sms_config[sy][status]" value="Y"<?php if ($this->setting['sy']['status'] == 'Y') { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="sms_config[sy][status]" value="N"<?php if ($this->setting['sy']['status']  != 'Y') { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('账户'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="sms_config[sy][account]" class="form-control" type="text" value="<?php echo $this->setting['sy']['account'] ; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('密码'); ?>:</span>
+                            <div class="col-sm-5 col-xs-8">
+                                <input name="sms_config[sy][pswd]" class="form-control" type="text" value="<?php echo $this->setting['sy']['pswd'] ; ?>"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tfoot>
+                <tr>
+                    <td>
+                        <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                    </td>
+                </tr>
+                </tfoot>            
+            </table>
+            </div>
+
+            <div class="tab-pane" id="tx">
+                <table class="table table-striped">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('开启状态'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <div class="btn-group mod-btn">
+                                        <label type="button" class="btn mod-btn-color">
+                                            <input type="radio" name="sms_config[tx][status]" value="Y"<?php if ($this->setting['tx']['status'] == 'Y') { ?> checked="checked"<?php } ?> /> <?php _e('开启'); ?>
+                                        </label>
+
+                                        <label type="button" class="btn mod-btn-color">
+                                            <input type="radio" name="sms_config[tx][status]" value="N"<?php if ($this->setting['tx']['status'] != 'Y') { ?> checked="checked"<?php } ?> /> <?php _e('关闭'); ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('accessKeyId'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <input name="sms_config[tx][accessKeyId]" class="form-control" type="text" value="<?php echo $this->setting['tx']['accessKeyId']; ?>"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('accessKeySecret'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <input name="sms_config[tx][accessKeySecret]" class="form-control" type="text" value="<?php echo $this->setting['tx']['accessKeySecret']; ?>"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('SignName'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <input name="sms_config[tx][SignName]" class="form-control" type="text" value="<?php echo $this->setting['tx']['SignName']; ?>"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <span class="col-sm-4 col-xs-3 control-label"><?php _e('TemplateCode'); ?>:</span>
+                                <div class="col-sm-5 col-xs-8">
+                                    <input name="sms_config[tx][TemplateCode]" class="form-control" type="text" value="<?php echo $this->setting['tx']['TemplateCode']; ?>"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tfoot>
+                    <tr>
+                        <td>
+                            <input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#tab_config'));" />
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+                </form>
+    </div>
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

@@ -1,0 +1,181 @@
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/css/default/pay2.css">
+<form>
+  <div class="datas"></div>
+    <div class="person_wallet_recharge">
+      <div class="pic" style="height: 1.2rem;text-align:center;font-size:20px;display: none;" id='shang_name'></div>
+      <div class="pic">金额：<input name="money" type="text" placeholder="0.00" value="<?php echo trim($_GET['price']);?>" id="txt" style="border: 1px solid #CCCCCC;width: 82%;height: 30px;" onkeyup="clearNoNum(this)"/></div>
+      <ul class="ul">
+        <?php if($this->money['status']==1):?>
+        <?php foreach($this->money['money'] as $k=>$v):?>
+          <li data-price="<?php echo $v;?>"><h2>￥<?php echo $v;?></h2><div class="sel" style=""></div></li>
+        <?php endforeach;?>
+        <?php endif;?>
+          <div style="clear: both;"></div>
+      </ul>
+      <div style="display: flex; justify-content: center;margin-bottom: 30px;">
+        <?php foreach($this->setting as $k=>$v):?>
+        <?php if($v['status']==1):?>
+          <div class="botton pay-btn" data-pay="<?php echo $k=='alipay'?2:($k=='wechat'?3:1);?>" style="background: <?php echo $k=='alipay'?'':($k=='wechat'?'#1bad1b':'#7643a5');?>"><img src="/static/css/default/img/<?php echo $k;?>.png" /><span ><?php echo $k=='alipay'?'支付宝支付':($k=='wechat'?'微信支付':'余额支付');?></span></div>
+          <?php endif;?>
+          <?php endforeach;?>
+        <input type="hidden" name="pay_method" />
+        <input type="hidden" name="ssid" value="<?php echo $this->ssid;?>" />
+      </div>
+    </div>
+</form>
+<script type="text/javascript">
+  var aa=parent.pay_data;
+  if('price' in aa){
+    $(".person_wallet_recharge ul").hide();
+    $("input[name=money]").val(parent.pay_data.price);
+  }
+  var index = parent.layer.getFrameIndex(window.name);
+  parent.layer.iframeAuto(index);  
+  $(".person_wallet_recharge .ul li").click(function(e){
+              $(this).addClass("current").siblings("li").removeClass("current");
+              $(this).children(".sel").show(0).parent().siblings().children(".sel").hide(0);
+              $("#txt").val($(this).attr('data-price'));
+  });
+  var html='';
+  $.each(parent.pay_data,function(k,v){  
+    html+='<input name="'+k+'" value="'+v+'" type="hidden" />';
+  })
+  $(".datas").empty().append(html);
+  var ptitle=parent.pay_data.passive_name?parent.pay_data.passive_name:parent.pay_data.remarks;
+  if(ptitle){
+    $("#shang_name").show();
+    $("#shang_name").empty().append(ptitle);
+  }
+    
+  $(".pay-btn").click(function(){
+    $("input[name=pay_method]").val($(this).attr('data-pay'));
+    if($(this).attr('data-pay')==1){
+      yepay($("#txt").val());
+    }else{
+      $.ajax({
+        url:parent.pay_data.url,
+        type:'POST',
+        data:$('form').serialize(),
+        dataType:'json',
+        success:function(ret){
+          if(ret.errno<0){
+            layer.msg(ret.err);
+          }else{
+            parent.layer.close(index);
+            parent.layer.open({
+              type: 2,
+              title: '扫码支付',
+              closeBtn: 1,
+              shadeClose: false,
+              area:['200px','250px'],
+              content: '/page/scan/?img='+encodeURIComponent(ret.img_url)+'&order_id='+ret.order_id+'&check_url='+encodeURIComponent(ret.check_url),
+            });
+          }
+        }
+      });
+    }
+ }); 
+  function yepay(money){
+    if(money<0 || !money || money == 0){
+      layer.msg('请选择金额');
+      return false;
+    } 
+    var have=0;
+    var balance=0;
+
+    $.ajax({
+      url:'/tools/havepass/',
+      type:"POST",
+      async:false,
+      data:{money:money},
+      dataType:'json',
+      success:function(result){
+        have=result.ret;
+        balance=result.balance;
+      }
+    });
+    if(money>parseFloat(balance)){
+      layer.alert('您的余额不足，请选择其他支付方式');
+      return false;
+    }    
+    if(have==1){
+      layer.prompt({title: '请输入交易密码', formType: 1,closeBtn :0}, function(pass, index){
+        layer.msg('正在支付中', {icon: 16,shade: 0.01});
+        layer.close(index);
+        $.ajax({
+          url: '/tools/checkpass/',
+          type:"POST",
+          data:{pass:pass},
+          success:function(result){
+            if(result==2){
+              layer.msg('交易密码错误');
+              return false;
+            }
+            gopay();
+          }
+        });
+      });
+    }else{
+      layer.confirm('您还未设置交易密码，是否去设置？', {icon: 3, title:'提示',btn:['立即设置','设置完成']}, 
+      function(){
+        window.open("/account/setting/trade/");       
+      },function(index){
+        layer.close(index);
+        $(".pay-btn").eq(2).click();
+      });
+    }     
+  }
+function gopay(){
+    $.ajax({
+      url:parent.pay_data.url,
+      type:'POST',
+      data:$('form').serialize(),
+      dataType:'json',
+      success:function(ret){
+        if(ret.errno<0){
+          layer.msg(ret.err);
+        }else{
+
+            setTimeout(function(){ 
+                  $.ajax({
+                    url:ret.check_url,
+                    type:'POST',
+                    data:{order_id:ret.item_id},
+                    dataType:'json',
+                    success:function(rets){
+                      if(rets.errno==1){
+                        layer.msg('支付成功',{icon:-1},function(){
+                            console.log(rets);
+                               var index = parent.layer.getFrameIndex(window.name);
+                               parent.layer.close(index);
+                            if(rets.err.url){
+                                parent.location.href=rets.err.url;
+                            }else{
+                              
+                               window.parent.location.reload();
+                            }
+                          // layer.closeAll();
+
+                        });
+                      }
+                    }
+                  })
+             }, 1000);
+        }
+
+      }
+    });
+}
+  function clearNoNum(obj){ 
+    obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符  
+    obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的  
+    obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+    obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入两个小数  
+    if(obj.value.indexOf(".")< 0 && obj.value !=""){//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
+        obj.value= parseFloat(obj.value); 
+    } 
+  } 
+</script>

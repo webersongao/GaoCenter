@@ -1,0 +1,15 @@
+#
+# robots.txt for WebersonGao
+#
+
+User-agent: *
+Disallow: /app/
+Disallow: /cache/
+Disallow: /install/
+Disallow: /99install/
+Disallow: /models/
+Disallow: /system/
+Disallow: /tmp/
+Disallow: /views/
+Disallow: /static/
+Disallow: /?/admin/

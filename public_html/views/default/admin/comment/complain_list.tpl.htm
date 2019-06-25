@@ -1,0 +1,72 @@
+<?php TPL::output('admin/global/header.tpl.htm'); ?>
+<?php TPL::output('admin/global/nav_menu.tpl.htm'); ?>
+
+<div class="aw-content-wrap">
+	<div class="mod">
+		<div class="mod-head">
+			<h3>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#list" data-toggle="tab"><?php _e('投诉管理'); ?></a></li>
+				</ul>
+			</h3>
+		</div>
+		<div class="mod-body tab-content">
+			<div class="tab-pane active" id="list">
+
+				<form id="batchs_form" action="admin/comment/answer_manage/" method="post">
+				<input type="hidden" id="action" name="action" value="remove_complain" />
+				<div class="table-responsive">
+				<?php if ($this->list) { ?>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th><input type="checkbox" class="check-all"></th>
+								<th><?php _e('ID'); ?></th>
+								<th><?php _e('回复ID'); ?></th>
+								<th><?php _e('问题ID'); ?></th>
+								<th><?php _e('投诉内容'); ?></th>
+								<th><?php _e('备注'); ?></th>
+								<th><?php _e('投诉者'); ?></th>
+								<th><?php _e('状态'); ?></th>
+								<th><?php _e('时间'); ?></th>
+								<th><?php _e('处理时间'); ?></th>
+								<th><?php _e('操作'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($this->list AS $key => $val) { ?>
+							<tr>
+								<td><input type="checkbox" name="answer_ids[]" value="<?php echo $val['id']; ?>"></td>
+								<td><?php echo $val['id']; ?></td>
+								<td><?php echo $val['answer_id']; ?></td>
+								<td><a href="question/<?php echo $val['question_id']; ?>" target="_blank"><?php echo $val['question_id']; ?></a></td>
+								<td style="text-align:left;"><?php echo $val['contents']; ?></td>
+								<td style="text-align:left;"><?php echo $val['remarks']; ?></td>
+								<td><a href="people/<?php echo $val['user_info']['url_token']; ?>" target="_blank"><?php echo $val['user_info']['user_name']; ?></a></td>
+								<td><?php if($val['stat'] == 1){echo '撤销该条最佳回复';}else if($val['stat'] == 2){echo '拒绝此投诉';}else{echo '未处理';} ?></td>
+								<td><?php echo date_friendly($val['addtime']); ?></td>
+								<td><?php echo date_friendly($val['updatetime']); ?></td>
+								<?php if($val['stat'] == 0 AND $val['question_info']['is_pay']==1 AND $val['question_info']['is_reward']==1){ ?>
+								<td><a href="admin/comment/complain_edit/id-<?php echo $val['id']; ?>" class="icon icon-edit md-tip" title="处理"></a></td>
+								<?php }else{ ?>
+								<td>——</td>
+								<?php } ?>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				<?php } ?>
+				</div>
+				</form>
+				<div class="mod-table-foot">
+					<?php echo $this->pagination; ?>
+
+					<a class="btn btn-danger" onclick="$('#action').val('remove_complain'); AWS.ajax_post($('#batchs_form'));"><?php _e('删除'); ?></a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<?php TPL::output('admin/global/footer.tpl.htm'); ?>

@@ -1,0 +1,58 @@
+<blockquote>
+    <form id="reward_form" action="admin/ajax/apply_handle/" method="post">
+
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('对象标题'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->data['item']['title'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('订单号'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->data['no'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('金额'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->data['amount'];?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('交易状态'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo $this->data['status']==1?'交易成功':'交易失败';?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <span class="col-sm-4 col-xs-3 control-label"><?php _e('交易时间'); ?>:</span>
+                                        <div class="col-sm-6 col-xs-8">
+                                            <div class="btn-group mod-btn"><?php echo date('Y-m-d H:i:s',$this->data['time']);?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+                        </form>
+</blockquote>
