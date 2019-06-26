@@ -42,6 +42,11 @@ GaoCenter是基于WeCenter3.3.3版本开发的一款现代化SNS系统，支持R
  - 支持：[http://www.wecenter.com/support/][3]
  - 讨论区：[http://wenda.wecenter.com][4]
 
+### GaoCenter 版权说明
+
+GaoCenter的源码是基于WeCenter的3.3.3版本修改而来，该开源项目的创建完全是基于技术分享和学习交流只需要，目前基于WeCenter的您可以在非商业化的前提下自由使用，如确需要商业化使用，在目前项目核心没有发生根本改变的情况下，请认真考虑Wecenter的开源协议以及该项目的MIT协议内容。
+
+
 ### GaoCenter 大感谢
 
 - WeCenter官方：[https://github.com/wecenter/wecenter/][5]
