@@ -2,7 +2,7 @@
 
 ---
 
-GaoCenter是基于WeCenter3.3.3版本开发的一款现代化SNS系统，支持Rest Api接口调用。 https://demo.taobihu.com/ 本项目的开发希望在Wecenter的基础上提供完整的SNS以及Wiki系统服务
+GaoCenter是基于WeCenter3.3.3版本开发的一款现代化SNS系统，支持Rest Api接口调用。 http://demo.taobihu.com/ 本项目的开发希望在Wecenter的基础上提供完整的SNS以及Wiki系统服务
 
 ### GaoCenter 问答系统的环境需求
 
